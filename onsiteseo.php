@@ -16,34 +16,50 @@ Author URI: http://www.ask-oracle.com/
 		{
 			if(!in_array($current_post_type,$default_post_types))
 			{
-				$custom_post_type_meta = "chk_robots_for_" . $current_post_type;
-				if(get_option($custom_post_type_meta) == "on")
+				if($post->onsite_meta_robots != "" || !empty($post->onsite_meta_robots))
 				{
-					$noindex = "chk_noindex_for_" . $current_post_type;
-					$nofollow = "chk_nofollow_for_" . $current_post_type;
-					if(get_option($noindex) == "on" && get_option($nofollow) == "on")
-					{
-						echo '<meta name="robots" content="noindex, nofollow" />'."\n";
-					}
-					else if(get_option($noindex) == "on" && get_option($nofollow) != "on")
-					{
-						echo '<meta name="robots" content="noindex, follow" />'."\n";
-					}
-					else if(get_option($noindex) != "on" && get_option($nofollow) == "on")
-					{
-						echo '<meta name="robots" content="index, nofollow" />'."\n";
-					}
-					else
-					{
-						echo '<meta name="robots" content="index, follow" />'."\n";
-					}
+					echo '<meta name="robots" content="'.$post->onsite_meta_robots.'" />'."\n";
 				}
+				else
+				{
+					$custom_post_type_meta = "chk_robots_for_" . $current_post_type;
+					if(get_option($custom_post_type_meta) == "on")
+					{
+						$noindex = "chk_noindex_for_" . $current_post_type;
+						$nofollow = "chk_nofollow_for_" . $current_post_type;
+						if(get_option($noindex) == "on" && get_option($nofollow) == "on")
+						{
+							echo '<meta name="robots" content="noindex, nofollow" />'."\n";
+						}
+						else if(get_option($noindex) == "on" && get_option($nofollow) != "on")
+						{
+							echo '<meta name="robots" content="noindex, follow" />'."\n";
+						}
+						else if(get_option($noindex) != "on" && get_option($nofollow) == "on")
+						{
+							echo '<meta name="robots" content="index, nofollow" />'."\n";
+						}
+						else
+						{
+							echo '<meta name="robots" content="index, follow" />'."\n";
+						}
+					}
+				}	
 			}
 		}
 	}
 	function setup_onsite_seo_admin_menus()
 	{
 		add_submenu_page('options-general.php', 'Onsite SEO Options', 'Onsite SEO', 'manage_options', 'onsite-seo','theme_onsiteseo_settings_page');
+		
+		$args = array('public' => true,'_builtin' => false);
+		$output = 'names';
+		$operator = 'and';
+		$post_types = get_post_types($args,$output,$operator);
+		foreach ($post_types  as $post_type)
+		{
+			add_meta_box('onsite_meta_robots', 'Onsite SEO Meta Robots', 'onsite_meta_robots_dropdown_box', $post_type, 'side', 'low');
+		}						
 	}
 	function theme_onsiteseo_settings_page()
 	{
@@ -157,6 +173,46 @@ Author URI: http://www.ask-oracle.com/
 		</div>
 <?php
 	}
+	function onsite_meta_robots_addcolumn()
+	{
+		global $wpdb;
+		if (false === $wpdb->query("SELECT onsite_meta_robots FROM $wpdb->posts LIMIT 0")) {
+			$wpdb->query("ALTER TABLE $wpdb->posts ADD COLUMN onsite_meta_robots varchar(20)");
+		}
+	}
+?>
+<?php	
+	function onsite_meta_robots_dropdown_box()
+	{
+		global $post;
+		$onsite_meta_robots = $post->onsite_meta_robots;
+?>
+		<fieldset id="mycustom-div">
+		<div>
+		<p>
+		<label for="onsite_meta_robots" ></label>
+			<select name="onsite_meta_robots" id="onsite_meta_robots">
+				<option value="">--select--</option>
+				<option <?php if ($onsite_meta_robots == "index, follow") echo 'selected="selected"'?>>index, follow</option>
+				<option <?php if ($onsite_meta_robots == "index, nofollow") echo 'selected="selected"'?>>index, nofollow</option>
+				<option <?php if ($onsite_meta_robots == "noindex, follow") echo 'selected="selected"'?>>noindex, follow</option>
+				<option <?php if ($onsite_meta_robots == "noindex, nofollow") echo 'selected="selected"'?>>noindex, nofollow</option>
+			</select>
+		</p>
+		</div>
+		</fieldset>
+<?php	
+	}
+	function meta_robots_insert_post($pID)
+	{
+		global $wpdb;
+		extract($_POST);
+		$wpdb->query("UPDATE $wpdb->posts SET onsite_meta_robots = '$onsite_meta_robots' WHERE ID = $pID");
+	}	
+?>
+<?php	
+add_action('init', "onsite_meta_robots_addcolumn");
 add_action("admin_menu", "setup_onsite_seo_admin_menus");
+add_action('wp_insert_post', 'meta_robots_insert_post');
 add_action('wp_head', "add_meta_robots_tag_for_custom_post");
 ?>
