@@ -10,48 +10,16 @@ Author URI: http://www.ask-oracle.com/
 	function add_meta_robots_tag_for_custom_post()
 	{
 		global $post;
-		$default_post_types = array('post','page','attachment','revision','nav_menu_item');
-		$current_post_type = strtolower($post->post_type);
-		if($current_post_type != "")
-		{
-			if(!in_array($current_post_type,$default_post_types))
-			{
-				if($post->onsite_meta_robots != "" || !empty($post->onsite_meta_robots))
-				{
-					echo '<meta name="robots" content="'.$post->onsite_meta_robots.'" />'."\n";
-				}
-				else
-				{
-					$custom_post_type_meta = "chk_robots_for_" . $current_post_type;
-					if(get_option($custom_post_type_meta) == "on")
-					{
-						$noindex = "chk_noindex_for_" . $current_post_type;
-						$nofollow = "chk_nofollow_for_" . $current_post_type;
-						if(get_option($noindex) == "on" && get_option($nofollow) == "on")
-						{
-							echo '<meta name="robots" content="noindex, nofollow" />'."\n";
-						}
-						else if(get_option($noindex) == "on" && get_option($nofollow) != "on")
-						{
-							echo '<meta name="robots" content="noindex, follow" />'."\n";
-						}
-						else if(get_option($noindex) != "on" && get_option($nofollow) == "on")
-						{
-							echo '<meta name="robots" content="index, nofollow" />'."\n";
-						}
-						else
-						{
-							echo '<meta name="robots" content="index, follow" />'."\n";
-						}
-					}
-				}	
-			}
+		$post_id = $post->ID;
+		if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+		{		
+			$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+			echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
 		}
 	}
 	function setup_onsite_seo_admin_menus()
 	{
 		add_submenu_page('options-general.php', 'Onsite SEO Options', 'Onsite SEO', 'manage_options', 'onsite-seo','theme_onsiteseo_settings_page');
-		
 		$args = array('public' => true,'_builtin' => false);
 		$output = 'names';
 		$operator = 'and';
@@ -59,7 +27,10 @@ Author URI: http://www.ask-oracle.com/
 		foreach ($post_types  as $post_type)
 		{
 			add_meta_box('onsite_meta_robots', 'Onsite SEO Meta Robots', 'onsite_meta_robots_dropdown_box', $post_type, 'side', 'low');
-		}						
+		}
+		add_meta_box('onsite_meta_robots', 'Onsite SEO Meta Robots', 'onsite_meta_robots_dropdown_box', 'post', 'side', 'low');
+		add_meta_box('onsite_meta_robots', 'Onsite SEO Meta Robots', 'onsite_meta_robots_dropdown_box', 'page', 'side', 'low');
+		
 	}
 	function theme_onsiteseo_settings_page()
 	{
@@ -74,11 +45,15 @@ Author URI: http://www.ask-oracle.com/
 						<td><input type="checkbox" id="chk_robots_for_pages" name="chk_robots_for_pages" <?php if(get_option('chk_robots_for_pages') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Pages</td>
 						<td><input type="checkbox" id="chk_noindex_for_pages" name="chk_noindex_for_pages" <?php if(get_option('chk_noindex_for_pages') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
 						<td><input type="checkbox" id="chk_nofollow_for_pages" name="chk_nofollow_for_pages" <?php if(get_option('chk_nofollow_for_pages') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+						<td><input type="checkbox" id="chk_overide_local_setting_for_pages" name="chk_overide_local_setting_for_pages"/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
+						<td><a href="" class="button">Delete all local data</a></td>
 					</tr>					
 					<tr valign="top">
 						<td><input type="checkbox" id="chk_robots_for_post" name="chk_robots_for_post" <?php if(get_option('chk_robots_for_post') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Posts</td>
 						<td><input type="checkbox" id="chk_noindex_for_post" name="chk_noindex_for_post" <?php if(get_option('chk_noindex_for_post') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
 						<td><input type="checkbox" id="chk_nofollow_for_post" name="chk_nofollow_for_post" <?php if(get_option('chk_nofollow_for_post') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+						<td><input type="checkbox" id="chk_overide_local_setting_for_post" name="chk_overide_local_setting_for_post"/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
+						<td><a href="" class="button">Delete all local data</a></td>
 					</tr>
 					<?php 
 						$args=array(
@@ -97,6 +72,8 @@ Author URI: http://www.ask-oracle.com/
 								<td><input type="checkbox" id="chk_robots_for_<?php echo $post_type;?>" name="chk_robots_for_<?php echo $post_type;?>" <?php $custom_post_type_name = 'chk_robots_for_' . $post_type;if(get_option($custom_post_type_name) == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for <?php echo $post_type;?></td>
 								<td><input type="checkbox" id="chk_noindex_for_<?php echo $post_type;?>" name="chk_noindex_for_<?php echo $post_type;?>" <?php $custom_post_type_name = 'chk_noindex_for_' . $post_type;if(get_option($custom_post_type_name) == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
 								<td><input type="checkbox" id="chk_nofollow_for_<?php echo $post_type;?>" name="chk_nofollow_for_<?php echo $post_type;?>" <?php $custom_post_type_name = 'chk_nofollow_for_' . $post_type;if(get_option($custom_post_type_name) == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+								<td><input type="checkbox" id="chk_overide_local_setting_for_<?php echo $post_type;?>" name="chk_overide_local_setting_for_<?php echo $post_type;?>"/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
+								<td><a href="" class="button">Delete all local data</a></td>
 							</tr>
 					
 					<?php
@@ -173,46 +150,146 @@ Author URI: http://www.ask-oracle.com/
 		</div>
 <?php
 	}
-	function onsite_meta_robots_addcolumn()
-	{
-		global $wpdb;
-		if (false === $wpdb->query("SELECT onsite_meta_robots FROM $wpdb->posts LIMIT 0")) {
-			$wpdb->query("ALTER TABLE $wpdb->posts ADD COLUMN onsite_meta_robots varchar(20)");
-		}
-	}
 ?>
 <?php	
-	function onsite_meta_robots_dropdown_box()
+	function onsite_meta_robots_dropdown_box($post)
 	{
-		global $post;
-		$onsite_meta_robots = $post->onsite_meta_robots;
+		global $post, $page;
+		if(trim($post->post_type) == "page")
+		{			
+			$post_id = $post->ID;
+			if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+			{				
+				// Use local settings				
+				$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+				$selected_robot_values = explode(",",$meta_value_onsite_robots_for_frontend);
+				$noindex = trim($selected_robot_values[0]);
+				$nofollow = trim($selected_robot_values[1]);
+			}
+			else
+			{				
+				// Use global settings
+				if(get_option('chk_noindex_for_pages') == "on")
+				{
+					$noindex = "noindex";
+				}
+				if(get_option('chk_nofollow_for_pages') == "on")
+				{
+					$nofollow = "nofollow";
+				}			
+			}
+		}
+		else if(trim($post->post_type) == "post")
+		{
+			$post_id = $post->ID;
+			if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+			{
+				// Use local settings
+				$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+				$selected_robot_values = explode(",",$meta_value_onsite_robots_for_frontend);
+				$noindex = trim($selected_robot_values[0]);
+				$nofollow = trim($selected_robot_values[1]);			
+			}
+			else
+			{
+				// Use global settings
+				if(get_option('chk_noindex_for_post') == "on")
+				{
+					$noindex = "noindex";
+				}
+				if(get_option('chk_nofollow_for_post') == "on")
+				{
+					$nofollow = "nofollow";
+				}
+			}
+		}
+		else
+		{
+			$post_id = $post->ID;
+			if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+			{
+				// Use local settings
+				$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+				$selected_robot_values = explode(",",$meta_value_onsite_robots_for_frontend);
+				$noindex = trim($selected_robot_values[0]);
+				$nofollow = trim($selected_robot_values[1]);
+			}
+			else
+			{
+				// Use global settings
+				$custom_post_type_vairable_name = 'chk_noindex_for_' . $post->post_type;
+				if(get_option($custom_post_type_vairable_name) == "on")
+				{
+					$noindex = "noindex";
+				}
+				if(get_option($custom_post_type_vairable_name) == "on")
+				{
+					$nofollow = "nofollow";
+				}
+			}
+		}
 ?>
 		<fieldset id="mycustom-div">
 		<div>
 		<p>
-		<label for="onsite_meta_robots" ></label>
-			<select name="onsite_meta_robots" id="onsite_meta_robots">
-				<option value="">--select--</option>
-				<option <?php if ($onsite_meta_robots == "index, follow") echo 'selected="selected"'?>>index, follow</option>
-				<option <?php if ($onsite_meta_robots == "index, nofollow") echo 'selected="selected"'?>>index, nofollow</option>
-				<option <?php if ($onsite_meta_robots == "noindex, follow") echo 'selected="selected"'?>>noindex, follow</option>
-				<option <?php if ($onsite_meta_robots == "noindex, nofollow") echo 'selected="selected"'?>>noindex, nofollow</option>
-			</select>
+			<input type="checkbox" id="chk_robots_for_noindex" name="chk_robots_for_noindex" <?php if($noindex == "noindex"){ echo "checked=checked";}?> />&nbsp;&nbsp;&nbsp;&nbsp;NOINDEX<br />
+			<input type="checkbox" id="chk_robots_for_nofollow" name="chk_robots_for_nofollow" <?php if($nofollow == "nofollow"){ echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;&nbsp;NOFOLLOW
 		</p>
 		</div>
 		</fieldset>
-<?php	
+<?php
 	}
-	function meta_robots_insert_post($pID)
+	function meta_robots_save_post($post_id)
 	{
-		global $wpdb;
-		extract($_POST);
-		$wpdb->query("UPDATE $wpdb->posts SET onsite_meta_robots = '$onsite_meta_robots' WHERE ID = $pID");
-	}	
+		global $post, $page;
+		$noindex = $_POST['chk_robots_for_noindex'];
+		$nofollow = $_POST['chk_robots_for_nofollow'];
+		
+		if((isset($noindex) && !empty($noindex)) && (isset($nofollow) && !empty($nofollow)))
+		{
+			$value = "noindex" . ", " . "nofollow";
+		}
+		else if((!isset($noindex) && empty($noindex)) && (isset($nofollow) && !empty($nofollow)))
+		{
+			$value = "index" . ", " . "nofollow";
+		}
+		else if((isset($noindex) && !empty($noindex)) && (!isset($nofollow) && empty($nofollow)))
+		{
+			$value = "noindex" . ", " . "follow";
+		}
+		else
+		{
+			$value = "index" . ", " . "follow";
+		}
+		
+		$new_meta_value = ( isset( $value ) ? $value : '' );
+	
+		/* Get the meta key. */
+		$meta_key = 'onsite_robots_for_frontend';
+	
+		/* Get the meta value of the custom field key. */
+		$meta_value = get_post_meta( $post_id, $meta_key, true );
+		
+		
+
+	
+		/* If a new meta value was added and there was no previous value, add it. */
+		if ( $new_meta_value && '' == $meta_value )
+			add_post_meta( $post_id, $meta_key, $new_meta_value, true );
+	
+		/* If the new meta value does not match the old value, update it. */
+		elseif ( $new_meta_value && $new_meta_value != $meta_value )
+			update_post_meta( $post_id, $meta_key, $new_meta_value );
+	
+		/* If there is no new meta value but an old value exists, delete it. */
+		elseif ( '' == $new_meta_value && $meta_value )
+			delete_post_meta( $post_id, $meta_key, $meta_value );		
+		
+		
+	}
 ?>
-<?php	
-add_action('init', "onsite_meta_robots_addcolumn");
+<?php
 add_action("admin_menu", "setup_onsite_seo_admin_menus");
-add_action('wp_insert_post', 'meta_robots_insert_post');
-add_action('wp_head', "add_meta_robots_tag_for_custom_post");
+add_action("edit_post", "meta_robots_save_post");
+add_action("wp_head", "add_meta_robots_tag_for_custom_post");
 ?>
