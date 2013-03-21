@@ -75,46 +75,47 @@ Author URI: http://www.ask-oracle.com/
 				}			
 			}			
 		}
-		
-		
-		$args=array('public'   => true,'_builtin' => false); 
-		$output = 'names'; // names or objects, note names is the default
-		$operator = 'and'; // 'and' or 'or'
-		$post_types=get_post_types($args,$output,$operator);
-		foreach ($post_types  as $post_type)
-		{
-			$chk_overide_local_setting_for_custom_post_type = 'chk_overide_local_setting_for_' . $post->post_type;
-			if(get_option($chk_overide_local_setting_for_custom_post_type) == "on")
+		else
+		{		
+			$args=array('public'   => true,'_builtin' => false); 
+			$output = 'names'; // names or objects, note names is the default
+			$operator = 'and'; // 'and' or 'or'
+			$post_types=get_post_types($args,$output,$operator);
+			foreach ($post_types  as $post_type)
 			{
-				$noindex_post_type = 'chk_noindex_for_' . $post->post_type;
-				$nofollow_post_type = 'chk_nofollow_for_' . $post->post_type;
-				if(get_option($noindex_post_type) == "on")
+				$chk_overide_local_setting_for_custom_post_type = 'chk_overide_local_setting_for_' . $post->post_type;
+				if(get_option($chk_overide_local_setting_for_custom_post_type) == "on")
 				{
-					$noindex = "noindex";
+					$noindex_post_type = 'chk_noindex_for_' . $post->post_type;
+					$nofollow_post_type = 'chk_nofollow_for_' . $post->post_type;
+					if(get_option($noindex_post_type) == "on")
+					{
+						$noindex = "noindex";
+					}
+					else
+					{
+						$noindex = "index";
+					}
+					if(get_option($nofollow_post_type) == "on")
+					{
+						$nofollow = "nofollow";
+					}
+					else
+					{
+						$nofollow = "follow";
+					}
+					echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 				}
 				else
 				{
-					$noindex = "index";
+					if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+					{		
+						$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+						echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+					}			
 				}
-				if(get_option($nofollow_post_type) == "on")
-				{
-					$nofollow = "nofollow";
-				}
-				else
-				{
-					$nofollow = "follow";
-				}
-				echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 			}
-			else
-			{
-				if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
-				{		
-					$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
-					echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
-				}			
-			}
-		}
+		}	
 	}
 	function setup_onsite_seo_admin_menus()
 	{
