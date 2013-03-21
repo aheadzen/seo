@@ -419,14 +419,23 @@ Author URI: http://www.ask-oracle.com/
 	{
 		global $wpdb;
 		$wpdb->query("UPDATE $wpdb->postmeta SET meta_value = '' where meta_key = 'onsite_robots_for_frontend' AND post_id IN (select ID from $wpdb->posts where post_type = '".$posttypevalues."' AND post_status = 'publish')");
+		return true;
 	}
+	function my_admin_notice(){
+		echo '<div class="updated">
+		   <p>Local Records Deleted Successfully.</p>
+		</div>';
+	}	
 ?>
 <?php
 add_action("admin_menu", "setup_onsite_seo_admin_menus");
 add_action("edit_post", "meta_robots_save_post");
 add_action("wp_head", "add_meta_robots_tag_for_custom_post");
-	if(isset($_GET['posttype']) &&  $_GET['posttype'] != "")
+if(isset($_GET['posttype']) &&  $_GET['posttype'] != "" && $_GET['action'] == "delete")
+{
+	if(deleteLocalRobotSetting($_GET['posttype']))
 	{
-		deleteLocalRobotSetting($_GET['posttype']);
-	}
+		add_action('admin_notices', 'my_admin_notice');
+	}	
+}
 ?>
