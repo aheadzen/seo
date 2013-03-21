@@ -11,10 +11,109 @@ Author URI: http://www.ask-oracle.com/
 	{
 		global $post;
 		$post_id = $post->ID;
-		if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
-		{		
-			$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
-			echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+		$post_type = $post->post_type;
+	
+		if(trim($post->post_type) == "page")
+		{
+			if(get_option('chk_overide_local_setting_for_pages') == "on")
+			{
+				if(get_option('chk_noindex_for_pages') == "on")
+				{
+					$noindex = "noindex";
+				}
+				else
+				{
+					$noindex = "index";
+				}
+				if(get_option('chk_nofollow_for_pages') == "on")
+				{
+					$nofollow = "nofollow";
+				}
+				else
+				{
+					$nofollow = "follow";
+				}
+				echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+			}
+			else
+			{
+				if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+				{		
+					$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+					echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+				}			
+			}			
+		}
+		else if(trim($post->post_type) == "post")
+		{
+			if(get_option('chk_overide_local_setting_for_post') == "on")
+			{
+				if(get_option('chk_noindex_for_post') == "on")
+				{
+					$noindex = "noindex";
+				}
+				else
+				{
+					$noindex = "index";
+				}
+				if(get_option('chk_nofollow_for_post') == "on")
+				{
+					$nofollow = "nofollow";
+				}
+				else
+				{
+					$nofollow = "follow";
+				}
+				echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+			}
+			else
+			{
+				if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+				{		
+					$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+					echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+				}			
+			}			
+		}
+		
+		
+		$args=array('public'   => true,'_builtin' => false); 
+		$output = 'names'; // names or objects, note names is the default
+		$operator = 'and'; // 'and' or 'or'
+		$post_types=get_post_types($args,$output,$operator);
+		foreach ($post_types  as $post_type)
+		{
+			$chk_overide_local_setting_for_custom_post_type = 'chk_overide_local_setting_for_' . $post->post_type;
+			if(get_option($chk_overide_local_setting_for_custom_post_type) == "on")
+			{
+				$noindex_post_type = 'chk_noindex_for_' . $post->post_type;
+				$nofollow_post_type = 'chk_nofollow_for_' . $post->post_type;
+				if(get_option($noindex_post_type) == "on")
+				{
+					$noindex = "noindex";
+				}
+				else
+				{
+					$noindex = "index";
+				}
+				if(get_option($nofollow_post_type) == "on")
+				{
+					$nofollow = "nofollow";
+				}
+				else
+				{
+					$nofollow = "follow";
+				}
+				echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+			}
+			else
+			{
+				if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+				{		
+					$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+					echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+				}			
+			}
 		}
 	}
 	function setup_onsite_seo_admin_menus()
@@ -45,14 +144,14 @@ Author URI: http://www.ask-oracle.com/
 						<td><input type="checkbox" id="chk_robots_for_pages" name="chk_robots_for_pages" <?php if(get_option('chk_robots_for_pages') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Pages</td>
 						<td><input type="checkbox" id="chk_noindex_for_pages" name="chk_noindex_for_pages" <?php if(get_option('chk_noindex_for_pages') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
 						<td><input type="checkbox" id="chk_nofollow_for_pages" name="chk_nofollow_for_pages" <?php if(get_option('chk_nofollow_for_pages') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
-						<td><input type="checkbox" id="chk_overide_local_setting_for_pages" name="chk_overide_local_setting_for_pages"/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
+						<td><input type="checkbox" id="chk_overide_local_setting_for_pages" name="chk_overide_local_setting_for_pages" <?php if(get_option('chk_overide_local_setting_for_pages') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
 						<td><a href="" class="button">Delete all local data</a></td>
 					</tr>					
 					<tr valign="top">
 						<td><input type="checkbox" id="chk_robots_for_post" name="chk_robots_for_post" <?php if(get_option('chk_robots_for_post') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Posts</td>
 						<td><input type="checkbox" id="chk_noindex_for_post" name="chk_noindex_for_post" <?php if(get_option('chk_noindex_for_post') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
 						<td><input type="checkbox" id="chk_nofollow_for_post" name="chk_nofollow_for_post" <?php if(get_option('chk_nofollow_for_post') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
-						<td><input type="checkbox" id="chk_overide_local_setting_for_post" name="chk_overide_local_setting_for_post"/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
+						<td><input type="checkbox" id="chk_overide_local_setting_for_post" name="chk_overide_local_setting_for_post" <?php if(get_option('chk_overide_local_setting_for_post') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
 						<td><a href="" class="button">Delete all local data</a></td>
 					</tr>
 					<?php 
@@ -66,13 +165,13 @@ Author URI: http://www.ask-oracle.com/
 						$get_all_post_types = array();
 						foreach ($post_types  as $post_type)
 						{
-							$get_all_post_types[] = "chk_robots_for_" . $post_type . ",chk_noindex_for_" . $post_type . ",chk_nofollow_for_" . $post_type;
+							$get_all_post_types[] = "chk_robots_for_" . $post_type . ",chk_noindex_for_" . $post_type . ",chk_nofollow_for_" . $post_type . ",chk_overide_local_setting_for_" . $post_type;
 					?>
 							<tr valign="top">
 								<td><input type="checkbox" id="chk_robots_for_<?php echo $post_type;?>" name="chk_robots_for_<?php echo $post_type;?>" <?php $custom_post_type_name = 'chk_robots_for_' . $post_type;if(get_option($custom_post_type_name) == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for <?php echo $post_type;?></td>
 								<td><input type="checkbox" id="chk_noindex_for_<?php echo $post_type;?>" name="chk_noindex_for_<?php echo $post_type;?>" <?php $custom_post_type_name = 'chk_noindex_for_' . $post_type;if(get_option($custom_post_type_name) == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
 								<td><input type="checkbox" id="chk_nofollow_for_<?php echo $post_type;?>" name="chk_nofollow_for_<?php echo $post_type;?>" <?php $custom_post_type_name = 'chk_nofollow_for_' . $post_type;if(get_option($custom_post_type_name) == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
-								<td><input type="checkbox" id="chk_overide_local_setting_for_<?php echo $post_type;?>" name="chk_overide_local_setting_for_<?php echo $post_type;?>"/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
+								<td><input type="checkbox" id="chk_overide_local_setting_for_<?php echo $post_type;?>" name="chk_overide_local_setting_for_<?php echo $post_type;?>" <?php $dynamic_override_local_seetings = 'chk_overide_local_setting_for_' . $post_type;if(get_option($dynamic_override_local_seetings) == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Global Override Local Setting</td>
 								<td><a href="" class="button">Delete all local data</a></td>
 							</tr>
 					
@@ -120,7 +219,7 @@ Author URI: http://www.ask-oracle.com/
 							<?php
 								if($get_all_post_types != "")
 								{
-									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post," . $get_all_post_types;
+									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages," . $get_all_post_types;
 							?>
 
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
@@ -128,7 +227,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								else
 								{
-									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post";																
+									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages";
 							?>
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
 							<?php
