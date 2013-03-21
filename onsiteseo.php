@@ -33,14 +33,20 @@ Author URI: http://www.ask-oracle.com/
 				{
 					$nofollow = "follow";
 				}
-				echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+				if(!($noindex == "index" && $nofollow == "follow"))
+				{
+					echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+				}
 			}
 			else
 			{
 				if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
-				{		
+				{					
 					$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
-					echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+					if($meta_value_onsite_robots_for_frontend != "index, follow")
+					{
+						echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+					}
 				}			
 			}			
 		}
