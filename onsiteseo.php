@@ -14,44 +14,228 @@ Author URI: http://www.ask-oracle.com/
 		$post_type = $post->post_type;
 	
 		if(trim($post->post_type) == "page")
-		{			
-			if(get_option('chk_robots_for_pages') == "on")			
+		{
+			if(bp_is_blog_page())
 			{
-				if(get_option('chk_overide_local_setting_for_pages') == "on")
+				if(get_option('chk_robots_for_pages') == "on")			
 				{
-					if(get_option('chk_noindex_for_pages') == "on")
+					if(get_option('chk_overide_local_setting_for_pages') == "on")
 					{
-						$noindex = "noindex";
-					}
-					else
-					{
-						$noindex = "index";
-					}
-					if(get_option('chk_nofollow_for_pages') == "on")
-					{
-						$nofollow = "nofollow";
-					}
-					else
-					{
-						$nofollow = "follow";
-					}
-					if(!($noindex == "index" && $nofollow == "follow"))
-					{
-						echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-					}
-				}
-				else
-				{
-					if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
-					{					
-						$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
-						if($meta_value_onsite_robots_for_frontend != "index, follow")
+						if(get_option('chk_noindex_for_pages') == "on")
 						{
-							echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+							$noindex = "noindex";
+						}
+						else
+						{
+							$noindex = "index";
+						}
+						if(get_option('chk_nofollow_for_pages') == "on")
+						{
+							$nofollow = "nofollow";
+						}
+						else
+						{
+							$nofollow = "follow";
+						}
+						if(!($noindex == "index" && $nofollow == "follow"))
+						{
+							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+						}
+					}
+					else
+					{
+						if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+						{					
+							$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+							if($meta_value_onsite_robots_for_frontend != "index, follow")
+							{
+								echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+							}
 						}
 					}
 				}
 			}
+			else
+			{
+				if(bp_is_user_activity())
+				{
+					$curr_action = bp_current_action();
+					$curr_action_for_activity = strtolower($curr_action);
+					
+					if($curr_action_for_activity == "just-me")
+					{					
+						if(get_option('chk_robots_for_buddypress_members_activity') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_members_activity') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_members_activity') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}				
+						}
+					}
+					
+					if($curr_action_for_activity == "mentions")
+					{
+						if(get_option('chk_robots_for_buddypress_members_mentions') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_members_mentions') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_members_mentions') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+						}
+					}
+
+					if($curr_action_for_activity == "favorites")
+					{
+						if(get_option('chk_robots_for_buddypress_members_favorites') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_members_favorites') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_members_favorites') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+						}
+					}
+					
+					if($curr_action_for_activity == "friends")
+					{
+						if(get_option('chk_robots_for_buddypress_members_friends') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_members_friends') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_members_friends') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+						}
+					}
+				}
+				else if(bp_is_user_profile())
+				{
+					$curr_action = bp_current_action();
+					$curr_action_for_profile = strtolower($curr_action);
+					
+					if($curr_action_for_profile == "public")
+					{					
+						if(get_option('chk_robots_for_buddypress_profile_public') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_profile_public') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_profile_public') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}				
+						}
+					}					
+				} // else if ends here
+				else if(bp_is_user_friends())
+				{
+					$curr_action = bp_current_action();
+					$curr_action_for_friends = strtolower($curr_action);
+					
+					if($curr_action_for_friends == "my-friends")
+					{					
+						if(get_option('chk_robots_for_buddypress_friends_friendship') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_friends_friendship') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_friends_friendship') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}				
+						}
+					}
+				}
+			}
+			
 		}
 		else if(trim($post->post_type) == "post")
 		{
