@@ -218,63 +218,91 @@ Author URI: http://www.ask-oracle.com/
 								{
 					?>
 									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_activity" name="chk_robots_for_buddypress_members_activity"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_activity" name="chk_noindex_for_buddypress_members_activity"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_activity" name="chk_nofollow_for_buddypress_members_activity"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										<td><input type="checkbox" id="chk_robots_for_buddypress_members_activity" name="chk_robots_for_buddypress_members_activity" <?php if(get_option('chk_robots_for_buddypress_members_activity') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_activity" name="chk_noindex_for_buddypress_members_activity" <?php if(get_option('chk_noindex_for_buddypress_members_activity') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_activity" name="chk_nofollow_for_buddypress_members_activity" <?php if(get_option('chk_nofollow_for_buddypress_members_activity') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
 									</tr>
 									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_mentions" name="chk_robots_for_buddypress_members_mentions"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Mentions</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_mentions" name="chk_noindex_for_buddypress_members_mentions"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_mentions" name="chk_nofollow_for_buddypress_members_mentions"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										<td><input type="checkbox" id="chk_robots_for_buddypress_members_mentions" name="chk_robots_for_buddypress_members_mentions" <?php if(get_option('chk_robots_for_buddypress_members_mentions') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Mentions</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_mentions" name="chk_noindex_for_buddypress_members_mentions" <?php if(get_option('chk_noindex_for_buddypress_members_mentions') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_mentions" name="chk_nofollow_for_buddypress_members_mentions" <?php if(get_option('chk_nofollow_for_buddypress_members_mentions') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
 									</tr>
 									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_favorites" name="chk_robots_for_buddypress_members_favorites"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Favorites</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_favorites" name="chk_noindex_for_buddypress_members_favorites"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_favorites" name="chk_nofollow_for_buddypress_members_favorites"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										<td><input type="checkbox" id="chk_robots_for_buddypress_members_favorites" name="chk_robots_for_buddypress_members_favorites" <?php if(get_option('chk_robots_for_buddypress_members_favorites') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Favorites</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_favorites" name="chk_noindex_for_buddypress_members_favorites" <?php if(get_option('chk_noindex_for_buddypress_members_favorites') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_favorites" name="chk_nofollow_for_buddypress_members_favorites" <?php if(get_option('chk_nofollow_for_buddypress_members_favorites') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+									</tr>
+									<?php
+										if(bp_is_active('friends'))
+										{
+									?>
+									<tr valign="top">
+										<td><input type="checkbox" id="chk_robots_for_buddypress_members_friends" name="chk_robots_for_buddypress_members_friends" <?php if(get_option('chk_robots_for_buddypress_members_friends') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Friends</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_friends" name="chk_noindex_for_buddypress_members_friends" <?php if(get_option('chk_noindex_for_buddypress_members_friends') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_friends" name="chk_nofollow_for_buddypress_members_friends" <?php if(get_option('chk_nofollow_for_buddypress_members_friends') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+									</tr>
+									<?php
+										}
+									?>
+									<?php
+										if(bp_is_active('groups'))
+										{
+									?>
+										<tr valign="top">
+											<td><input type="checkbox" id="chk_robots_for_buddypress_members_groups" name="chk_robots_for_buddypress_members_groups" <?php if(get_option('chk_robots_for_buddypress_members_groups') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Groups</td>
+											<td><input type="checkbox" id="chk_noindex_for_buddypress_members_groups" name="chk_noindex_for_buddypress_members_groups" <?php if(get_option('chk_noindex_for_buddypress_members_groups') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+											<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_groups" name="chk_nofollow_for_buddypress_members_groups" <?php if(get_option('chk_nofollow_for_buddypress_members_groups') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										</tr>
+									<?php
+										}
+									}	
+									?>
+									<?php
+										if(bp_is_active('forums'))
+										{
+									?>									
+									<tr valign="top">
+										<td><input type="checkbox" id="chk_robots_for_buddypress_members_forums_topics" name="chk_robots_for_buddypress_members_forums_topics" <?php if(get_option('chk_robots_for_buddypress_members_forums_topics') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Forums -> Topics Started</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_forums_topics" name="chk_noindex_for_buddypress_members_forums_topics" <?php if(get_option('chk_noindex_for_buddypress_members_forums_topics') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_forums_topics" name="chk_nofollow_for_buddypress_members_forums_topics" <?php if(get_option('chk_nofollow_for_buddypress_members_forums_topics') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
 									</tr>
 									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_friends" name="chk_robots_for_buddypress_members_friends"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Friends</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_friends" name="chk_noindex_for_buddypress_members_friends"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_friends" name="chk_nofollow_for_buddypress_members_friends"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										<td><input type="checkbox" id="chk_robots_for_buddypress_members_forums_replied" name="chk_robots_for_buddypress_members_forums_replied" <?php if(get_option('chk_robots_for_buddypress_members_forums_replied') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Forums -> Replied To</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_forums_replied" name="chk_noindex_for_buddypress_members_forums_replied" <?php if(get_option('chk_noindex_for_buddypress_members_forums_replied') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_forums_replied" name="chk_nofollow_for_buddypress_members_forums_replied" <?php if(get_option('chk_nofollow_for_buddypress_members_forums_replied') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
 									</tr>
+									<?php
+										}
+									?>																		
 									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_groups" name="chk_robots_for_buddypress_members_groups"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Groups</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_groups" name="chk_noindex_for_buddypress_members_groups"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_groups" name="chk_nofollow_for_buddypress_members_groups"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										<td><input type="checkbox" id="chk_robots_for_buddypress_profile_public" name="chk_robots_for_buddypress_profile_public" <?php if(get_option('chk_robots_for_buddypress_profile_public') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Profile -> Public</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_profile_public" name="chk_noindex_for_buddypress_profile_public" <?php if(get_option('chk_noindex_for_buddypress_profile_public') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_profile_public" name="chk_nofollow_for_buddypress_profile_public" <?php if(get_option('chk_nofollow_for_buddypress_profile_public') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
 									</tr>
+									<?php
+										if(bp_is_active('friends'))
+										{
+									?>
 									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_groups" name="chk_robots_for_buddypress_members_groups"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Activity -> Groups</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_groups" name="chk_noindex_for_buddypress_members_groups"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_groups" name="chk_nofollow_for_buddypress_members_groups"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										<td><input type="checkbox" id="chk_robots_for_buddypress_friends_friendship" name="chk_robots_for_buddypress_friends_friendship" <?php if(get_option('chk_robots_for_buddypress_friends_friendship') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Friends -> Friendship</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_friends_friendship" name="chk_noindex_for_buddypress_friends_friendship" <?php if(get_option('chk_noindex_for_buddypress_friends_friendship') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_friends_friendship" name="chk_nofollow_for_buddypress_friends_friendship" <?php if(get_option('chk_nofollow_for_buddypress_friends_friendship') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
 									</tr>
+									<?php
+										}
+									?>
+									<?php
+										if(bp_is_active('groups'))
+										{
+									?>
 									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_forums_topics" name="chk_robots_for_buddypress_members_forums_topics"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Forums -> Topics Started</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_forums_topics" name="chk_noindex_for_buddypress_members_forums_topics"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_forums_topics" name="chk_nofollow_for_buddypress_members_forums_topics"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+										<td><input type="checkbox" id="chk_robots_for_buddypress_groups" name="chk_robots_for_buddypress_groups" <?php if(get_option('chk_robots_for_buddypress_groups') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Groups</td>
+										<td><input type="checkbox" id="chk_noindex_for_buddypress_groups" name="chk_noindex_for_buddypress_groups" <?php if(get_option('chk_noindex_for_buddypress_groups') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+										<td><input type="checkbox" id="chk_nofollow_for_buddypress_groups" name="chk_nofollow_for_buddypress_groups" <?php if(get_option('chk_nofollow_for_buddypress_groups') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
 									</tr>
-									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_members_forums_replied" name="chk_robots_for_buddypress_members_forums_replied"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Forums -> Replied To</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_members_forums_replied" name="chk_noindex_for_buddypress_members_forums_replied"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_members_forums_replied" name="chk_nofollow_for_buddypress_members_forums_replied"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
-									</tr>
-					<?php
-								}
-					?>
-									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_profile_public" name="chk_robots_for_buddypress_profile_public"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Profile -> Public</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_profile_public" name="chk_noindex_for_buddypress_profile_public"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_profile_public" name="chk_nofollow_for_buddypress_profile_public"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
-									</tr>
-									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_friends_friendship" name="chk_robots_for_buddypress_friends_friendship"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Friends -> Friendship</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_friends_friendship" name="chk_noindex_for_buddypress_friends_friendship"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_friends_friendship" name="chk_nofollow_for_buddypress_friends_friendship"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
-									</tr>									
-									<tr valign="top">
-										<td><input type="checkbox" id="chk_robots_for_buddypress_groups" name="chk_robots_for_buddypress_groups"/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Members Groups</td>
-										<td><input type="checkbox" id="chk_noindex_for_buddypress_groups" name="chk_noindex_for_buddypress_groups"/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
-										<td><input type="checkbox" id="chk_nofollow_for_buddypress_groups" name="chk_nofollow_for_buddypress_groups"/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
-									</tr>
+									<?php
+										}
+									?>
 					<?php
 							}
 						}	
@@ -284,7 +312,7 @@ Author URI: http://www.ask-oracle.com/
 							<?php
 								if($get_all_post_types != "")
 								{
-									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages," . $get_all_post_types;
+									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages,chk_robots_for_buddypress_members_activity,chk_noindex_for_buddypress_members_activity,chk_nofollow_for_buddypress_members_activity,chk_robots_for_buddypress_members_mentions,chk_noindex_for_buddypress_members_mentions,chk_nofollow_for_buddypress_members_mentions,chk_robots_for_buddypress_members_favorites,chk_noindex_for_buddypress_members_favorites,chk_nofollow_for_buddypress_members_favorites,chk_robots_for_buddypress_members_friends,chk_noindex_for_buddypress_members_friends,chk_nofollow_for_buddypress_members_friends,chk_robots_for_buddypress_members_groups,chk_noindex_for_buddypress_members_groups,chk_nofollow_for_buddypress_members_groups,chk_robots_for_buddypress_members_forums_topics,chk_noindex_for_buddypress_members_forums_topics,chk_nofollow_for_buddypress_members_forums_topics,chk_robots_for_buddypress_members_forums_replied,chk_noindex_for_buddypress_members_forums_replied,chk_nofollow_for_buddypress_members_forums_replied,chk_robots_for_buddypress_profile_public,chk_noindex_for_buddypress_profile_public,chk_nofollow_for_buddypress_profile_public,chk_robots_for_buddypress_friends_friendship,chk_noindex_for_buddypress_friends_friendship,chk_nofollow_for_buddypress_friends_friendship,chk_robots_for_buddypress_groups,chk_noindex_for_buddypress_groups,chk_nofollow_for_buddypress_groups," . $get_all_post_types;
 							?>
 
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
@@ -292,12 +320,12 @@ Author URI: http://www.ask-oracle.com/
 								}
 								else
 								{
-									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages";
+									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages,chk_robots_for_buddypress_members_activity,chk_noindex_for_buddypress_members_activity,chk_nofollow_for_buddypress_members_activity,chk_robots_for_buddypress_members_mentions,chk_noindex_for_buddypress_members_mentions,chk_nofollow_for_buddypress_members_mentions,chk_robots_for_buddypress_members_favorites,chk_noindex_for_buddypress_members_favorites,chk_nofollow_for_buddypress_members_favorites,chk_robots_for_buddypress_members_friends,chk_noindex_for_buddypress_members_friends,chk_nofollow_for_buddypress_members_friends,chk_robots_for_buddypress_members_groups,chk_noindex_for_buddypress_members_groups,chk_nofollow_for_buddypress_members_groups,chk_robots_for_buddypress_members_forums_topics,chk_noindex_for_buddypress_members_forums_topics,chk_nofollow_for_buddypress_members_forums_topics,chk_robots_for_buddypress_members_forums_replied,chk_noindex_for_buddypress_members_forums_replied,chk_nofollow_for_buddypress_members_forums_replied,chk_robots_for_buddypress_profile_public,chk_noindex_for_buddypress_profile_public,chk_nofollow_for_buddypress_profile_public,chk_robots_for_buddypress_friends_friendship,chk_noindex_for_buddypress_friends_friendship,chk_nofollow_for_buddypress_friends_friendship,chk_robots_for_buddypress_groups,chk_noindex_for_buddypress_groups,chk_nofollow_for_buddypress_groups";
 							?>
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
 							<?php
 								}
-							?>	
+							?>
 							<input type="hidden" name="action" value="update" />
 							<input type="submit" value="Save settings" class="button-primary"/>
 						</td>
