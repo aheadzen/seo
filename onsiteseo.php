@@ -39,16 +39,18 @@ Author URI: http://www.ask-oracle.com/
 						}
 						if(!($noindex == "index" && $nofollow == "follow"))
 						{
-							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+							echo '<!-- onsite seo plugin -->';
+							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";							
 						}
 					}
 					else
 					{
 						if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
-						{					
+						{
 							$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
 							if($meta_value_onsite_robots_for_frontend != "index, follow")
 							{
+								echo '<!-- onsite seo plugin -->';
 								echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
 							}
 						}
@@ -79,6 +81,7 @@ Author URI: http://www.ask-oracle.com/
 						}
 						if(!($noindex == "index" && $nofollow == "follow"))
 						{
+							echo '<!-- onsite seo plugin -->';
 							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 						}
 					}					
@@ -105,6 +108,7 @@ Author URI: http://www.ask-oracle.com/
 						}
 						if(!($noindex == "index" && $nofollow == "follow"))
 						{
+							echo '<!-- onsite seo plugin -->';
 							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 						}
 					}
@@ -131,6 +135,7 @@ Author URI: http://www.ask-oracle.com/
 						}
 						if(!($noindex == "index" && $nofollow == "follow"))
 						{
+							echo '<!-- onsite seo plugin -->';
 							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 						}
 					}
@@ -162,6 +167,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}				
 						}
@@ -189,6 +195,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}
 						}
@@ -216,6 +223,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}
 						}
@@ -243,6 +251,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}
 						}
@@ -269,6 +278,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}
 						}
@@ -301,6 +311,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}				
 						}
@@ -333,6 +344,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}				
 						}
@@ -365,6 +377,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}
 						}
@@ -397,6 +410,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}
 						}
@@ -423,6 +437,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								if(!($noindex == "index" && $nofollow == "follow"))
 								{
+									echo '<!-- onsite seo plugin -->';
 									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 								}
 						}
@@ -454,6 +469,7 @@ Author URI: http://www.ask-oracle.com/
 					}
 					if(!($noindex == "index" && $nofollow == "follow"))
 					{
+						echo '<!-- onsite seo plugin -->';
 						echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 					}
 				}
@@ -464,6 +480,7 @@ Author URI: http://www.ask-oracle.com/
 						$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
 						if($meta_value_onsite_robots_for_frontend != "index, follow")
 						{
+							echo '<!-- onsite seo plugin -->';
 							echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
 						}
 					}
@@ -502,6 +519,7 @@ Author URI: http://www.ask-oracle.com/
 						}
 						if(!($noindex == "index" && $nofollow == "follow"))
 						{
+							echo '<!-- onsite seo plugin -->';
 							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 						}
 					}
@@ -512,6 +530,7 @@ Author URI: http://www.ask-oracle.com/
 							$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
 							if($meta_value_onsite_robots_for_frontend != "index, follow")
 							{
+								echo '<!-- onsite seo plugin -->';
 								echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
 							}
 						}
@@ -911,6 +930,6 @@ if(isset($_GET['posttype']) &&  $_GET['posttype'] != "" && $_GET['action'] == "d
 	if(deleteLocalRobotSetting($_GET['posttype']))
 	{
 		add_action('admin_notices', 'my_admin_notice');
-	}	
+	}
 }
 ?>
