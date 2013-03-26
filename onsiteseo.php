@@ -169,6 +169,32 @@ Author URI: http://www.ask-oracle.com/
 								}
 						}
 					}
+					if($curr_action_for_activity == "groups")
+					{
+						if(get_option('chk_robots_for_buddypress_members_groups') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_members_groups') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_members_groups') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+						}
+					}
 				}
 				else if(bp_is_user_profile())
 				{
@@ -233,7 +259,97 @@ Author URI: http://www.ask-oracle.com/
 								}				
 						}
 					}
-				}
+				} // else if ends here
+				else if(bp_is_user_groups())
+				{
+					$curr_action = bp_current_action();
+					$curr_action_for_groups = strtolower($curr_action);
+					//my-groups //invites
+					if($curr_action_for_groups == "my-groups")
+					{
+						if(get_option('chk_robots_for_buddypress_groups') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_groups') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_groups') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+						}
+					}
+				} // else if ends here
+				else if(bp_is_user_forums())
+				{
+					$curr_action = bp_current_action();
+					$curr_action_for_forums = strtolower($curr_action);
+
+					if($curr_action_for_forums == "topics")
+					{
+						if(get_option('chk_robots_for_buddypress_members_forums_topics') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_members_forums_topics') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_members_forums_topics') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+						}
+					}
+					else if($curr_action_for_forums == "replies")
+					{
+						if(get_option('chk_robots_for_buddypress_members_forums_replied') == "on")
+						{
+								if(get_option('chk_noindex_for_buddypress_members_forums_replied') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_members_forums_replied') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+						}
+					}
+				} // else if ends here
 			}
 			
 		}
@@ -397,7 +513,7 @@ Author URI: http://www.ask-oracle.com/
 						{
 							if(bp_is_active('members'))
 							{
-								echo "<tr><td colspan='5'><h3>Members Module Buddypress Options</h3></td><tr>";
+								echo "<tr><td colspan='5'><h3>Buddypress Options</h3></td><tr>";
 								if(bp_is_active('activity'))
 								{
 					?>
