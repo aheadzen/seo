@@ -57,6 +57,84 @@ Author URI: http://www.ask-oracle.com/
 			}
 			else
 			{
+				if(bp_is_page('activity'))
+				{
+					if(get_option('chk_robots_for_buddypress_activity') == "on")
+					{
+						if(get_option('chk_noindex_for_buddypress_activity') == "on")
+						{
+							$noindex = "noindex";
+						}
+						else
+						{
+							$noindex = "index";
+						}
+						if(get_option('chk_nofollow_for_buddypress_activity') == "on")
+						{
+							$nofollow = "nofollow";
+						}
+						else
+						{
+							$nofollow = "follow";
+						}
+						if(!($noindex == "index" && $nofollow == "follow"))
+						{
+							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+						}
+					}					
+				}
+				if(bp_is_page('forums'))
+				{
+					if(get_option('chk_robots_for_buddypress_forums') == "on")
+					{
+						if(get_option('chk_noindex_for_buddypress_forums') == "on")
+						{
+							$noindex = "noindex";
+						}
+						else
+						{
+							$noindex = "index";
+						}
+						if(get_option('chk_nofollow_for_buddypress_forums') == "on")
+						{
+							$nofollow = "nofollow";
+						}
+						else
+						{
+							$nofollow = "follow";
+						}
+						if(!($noindex == "index" && $nofollow == "follow"))
+						{
+							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+						}
+					}
+				}
+				if(bp_is_page('groups'))
+				{
+					if(get_option('chk_robots_for_buddypress_groups_main') == "on")
+					{
+						if(get_option('chk_noindex_for_buddypress_groups_main') == "on")
+						{
+							$noindex = "noindex";
+						}
+						else
+						{
+							$noindex = "index";
+						}
+						if(get_option('chk_nofollow_for_buddypress_groups_main') == "on")
+						{
+							$nofollow = "nofollow";
+						}
+						else
+						{
+							$nofollow = "follow";
+						}
+						if(!($noindex == "index" && $nofollow == "follow"))
+						{
+							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+						}
+					}
+				}
 				if(bp_is_user_activity())
 				{
 					$curr_action = bp_current_action();
@@ -349,9 +427,8 @@ Author URI: http://www.ask-oracle.com/
 								}
 						}
 					}
-				} // else if ends here
-			}
-			
+				} // else if ends here for forums
+			}			
 		}
 		else if(trim($post->post_type) == "post")
 		{
@@ -513,7 +590,7 @@ Author URI: http://www.ask-oracle.com/
 						{
 							if(bp_is_active('members'))
 							{
-								echo "<tr><td colspan='5'><h3>Buddypress Options</h3></td><tr>";
+								echo "<tr><td colspan='5'><h3>Member Module Buddypress Options</h3></td><tr>";
 								if(bp_is_active('activity'))
 								{
 					?>
@@ -605,14 +682,48 @@ Author URI: http://www.ask-oracle.com/
 									?>
 					<?php
 							}
-						}	
-					?>					
+							if(bp_is_active('activity'))
+							{
+								echo "<tr><td colspan='5'><h3>Activity Module Buddypress Options</h3></td><tr>";
+					?>
+								<tr valign="top">
+									<td><input type="checkbox" id="chk_robots_for_buddypress_activity" name="chk_robots_for_buddypress_activity" <?php if(get_option('chk_robots_for_buddypress_activity') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Buddypress Activity</td>
+									<td><input type="checkbox" id="chk_noindex_for_buddypress_activity" name="chk_noindex_for_buddypress_activity" <?php if(get_option('chk_noindex_for_buddypress_activity') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+									<td><input type="checkbox" id="chk_nofollow_for_buddypress_activity" name="chk_nofollow_for_buddypress_activity" <?php if(get_option('chk_nofollow_for_buddypress_activity') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+								</tr>
+					<?php			
+							}
+							if(bp_is_active('forums'))
+							{
+								echo "<tr><td colspan='5'><h3>Forums Module Buddypress Options</h3></td><tr>";
+					?>
+								<tr valign="top">
+									<td><input type="checkbox" id="chk_robots_for_buddypress_forums" name="chk_robots_for_buddypress_forums" <?php if(get_option('chk_robots_for_buddypress_forums') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Buddypress Forums</td>
+									<td><input type="checkbox" id="chk_noindex_for_buddypress_forums" name="chk_noindex_for_buddypress_forums" <?php if(get_option('chk_noindex_for_buddypress_forums') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+									<td><input type="checkbox" id="chk_nofollow_for_buddypress_forums" name="chk_nofollow_for_buddypress_forums" <?php if(get_option('chk_nofollow_for_buddypress_forums') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+								</tr>
+					
+					<?php
+							}
+							if(bp_is_active('groups'))
+							{
+								echo "<tr><td colspan='5'><h3>Groups Module Buddypress Options</h3></td><tr>";
+					?>
+								<tr valign="top">
+									<td><input type="checkbox" id="chk_robots_for_buddypress_groups_main" name="chk_robots_for_buddypress_groups_main" <?php if(get_option('chk_robots_for_buddypress_groups_main') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;Set These Meta Robots tag for Buddypress Groups</td>
+									<td><input type="checkbox" id="chk_noindex_for_buddypress_groups_main" name="chk_noindex_for_buddypress_groups_main" <?php if(get_option('chk_noindex_for_buddypress_groups_main') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOINDEX</td>
+									<td><input type="checkbox" id="chk_nofollow_for_buddypress_groups_main" name="chk_nofollow_for_buddypress_groups_main" <?php if(get_option('chk_nofollow_for_buddypress_groups_main') == "on"){echo "checked=checked";}?>/>&nbsp;&nbsp;&nbsp;NOFOLLOW</td>
+								</tr>
+					<?php
+							}
+						}
+					?>
 					<tr valign="top">
 						<td>
 							<?php
 								if($get_all_post_types != "")
 								{
-									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages,chk_robots_for_buddypress_members_activity,chk_noindex_for_buddypress_members_activity,chk_nofollow_for_buddypress_members_activity,chk_robots_for_buddypress_members_mentions,chk_noindex_for_buddypress_members_mentions,chk_nofollow_for_buddypress_members_mentions,chk_robots_for_buddypress_members_favorites,chk_noindex_for_buddypress_members_favorites,chk_nofollow_for_buddypress_members_favorites,chk_robots_for_buddypress_members_friends,chk_noindex_for_buddypress_members_friends,chk_nofollow_for_buddypress_members_friends,chk_robots_for_buddypress_members_groups,chk_noindex_for_buddypress_members_groups,chk_nofollow_for_buddypress_members_groups,chk_robots_for_buddypress_members_forums_topics,chk_noindex_for_buddypress_members_forums_topics,chk_nofollow_for_buddypress_members_forums_topics,chk_robots_for_buddypress_members_forums_replied,chk_noindex_for_buddypress_members_forums_replied,chk_nofollow_for_buddypress_members_forums_replied,chk_robots_for_buddypress_profile_public,chk_noindex_for_buddypress_profile_public,chk_nofollow_for_buddypress_profile_public,chk_robots_for_buddypress_friends_friendship,chk_noindex_for_buddypress_friends_friendship,chk_nofollow_for_buddypress_friends_friendship,chk_robots_for_buddypress_groups,chk_noindex_for_buddypress_groups,chk_nofollow_for_buddypress_groups," . $get_all_post_types;
+									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages,chk_robots_for_buddypress_members_activity,chk_noindex_for_buddypress_members_activity,chk_nofollow_for_buddypress_members_activity,chk_robots_for_buddypress_members_mentions,chk_noindex_for_buddypress_members_mentions,chk_nofollow_for_buddypress_members_mentions,chk_robots_for_buddypress_members_favorites,chk_noindex_for_buddypress_members_favorites,chk_nofollow_for_buddypress_members_favorites,chk_robots_for_buddypress_members_friends,chk_noindex_for_buddypress_members_friends,chk_nofollow_for_buddypress_members_friends,chk_robots_for_buddypress_members_groups,chk_noindex_for_buddypress_members_groups,chk_nofollow_for_buddypress_members_groups,chk_robots_for_buddypress_members_forums_topics,chk_noindex_for_buddypress_members_forums_topics,chk_nofollow_for_buddypress_members_forums_topics,chk_robots_for_buddypress_members_forums_replied,chk_noindex_for_buddypress_members_forums_replied,chk_nofollow_for_buddypress_members_forums_replied,chk_robots_for_buddypress_profile_public,chk_noindex_for_buddypress_profile_public,chk_nofollow_for_buddypress_profile_public,chk_robots_for_buddypress_friends_friendship,chk_noindex_for_buddypress_friends_friendship,chk_nofollow_for_buddypress_friends_friendship,chk_robots_for_buddypress_groups,chk_noindex_for_buddypress_groups,chk_nofollow_for_buddypress_groups,chk_robots_for_buddypress_activity,chk_noindex_for_buddypress_activity,chk_nofollow_for_buddypress_activity,chk_robots_for_buddypress_forums,chk_noindex_for_buddypress_forums,chk_nofollow_for_buddypress_forums,chk_robots_for_buddypress_groups_main,chk_noindex_for_buddypress_groups_main,chk_nofollow_for_buddypress_groups_main," . $get_all_post_types;
 							?>
 
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
@@ -620,7 +731,7 @@ Author URI: http://www.ask-oracle.com/
 								}
 								else
 								{
-									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages,chk_robots_for_buddypress_members_activity,chk_noindex_for_buddypress_members_activity,chk_nofollow_for_buddypress_members_activity,chk_robots_for_buddypress_members_mentions,chk_noindex_for_buddypress_members_mentions,chk_nofollow_for_buddypress_members_mentions,chk_robots_for_buddypress_members_favorites,chk_noindex_for_buddypress_members_favorites,chk_nofollow_for_buddypress_members_favorites,chk_robots_for_buddypress_members_friends,chk_noindex_for_buddypress_members_friends,chk_nofollow_for_buddypress_members_friends,chk_robots_for_buddypress_members_groups,chk_noindex_for_buddypress_members_groups,chk_nofollow_for_buddypress_members_groups,chk_robots_for_buddypress_members_forums_topics,chk_noindex_for_buddypress_members_forums_topics,chk_nofollow_for_buddypress_members_forums_topics,chk_robots_for_buddypress_members_forums_replied,chk_noindex_for_buddypress_members_forums_replied,chk_nofollow_for_buddypress_members_forums_replied,chk_robots_for_buddypress_profile_public,chk_noindex_for_buddypress_profile_public,chk_nofollow_for_buddypress_profile_public,chk_robots_for_buddypress_friends_friendship,chk_noindex_for_buddypress_friends_friendship,chk_nofollow_for_buddypress_friends_friendship,chk_robots_for_buddypress_groups,chk_noindex_for_buddypress_groups,chk_nofollow_for_buddypress_groups";
+									$value = "chk_robots_for_pages,chk_noindex_for_pages,chk_nofollow_for_pages,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_pages,chk_robots_for_buddypress_members_activity,chk_noindex_for_buddypress_members_activity,chk_nofollow_for_buddypress_members_activity,chk_robots_for_buddypress_members_mentions,chk_noindex_for_buddypress_members_mentions,chk_nofollow_for_buddypress_members_mentions,chk_robots_for_buddypress_members_favorites,chk_noindex_for_buddypress_members_favorites,chk_nofollow_for_buddypress_members_favorites,chk_robots_for_buddypress_members_friends,chk_noindex_for_buddypress_members_friends,chk_nofollow_for_buddypress_members_friends,chk_robots_for_buddypress_members_groups,chk_noindex_for_buddypress_members_groups,chk_nofollow_for_buddypress_members_groups,chk_robots_for_buddypress_members_forums_topics,chk_noindex_for_buddypress_members_forums_topics,chk_nofollow_for_buddypress_members_forums_topics,chk_robots_for_buddypress_members_forums_replied,chk_noindex_for_buddypress_members_forums_replied,chk_nofollow_for_buddypress_members_forums_replied,chk_robots_for_buddypress_profile_public,chk_noindex_for_buddypress_profile_public,chk_nofollow_for_buddypress_profile_public,chk_robots_for_buddypress_friends_friendship,chk_noindex_for_buddypress_friends_friendship,chk_nofollow_for_buddypress_friends_friendship,chk_robots_for_buddypress_groups,chk_noindex_for_buddypress_groups,chk_nofollow_for_buddypress_groups,chk_robots_for_buddypress_activity,chk_noindex_for_buddypress_activity,chk_nofollow_for_buddypress_activity,chk_robots_for_buddypress_forums,chk_noindex_for_buddypress_forums,chk_nofollow_for_buddypress_forums,chk_robots_for_buddypress_groups_main,chk_noindex_for_buddypress_groups_main,chk_nofollow_for_buddypress_groups_main";
 							?>
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
 							<?php
