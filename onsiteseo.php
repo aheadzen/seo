@@ -12,12 +12,14 @@ Author URI: http://www.ask-oracle.com/
 		global $post;
 		$post_id = $post->ID;
 		$post_type = $post->post_type;
-	
+		
+				
+		
 		if(trim($post->post_type) == "page")
 		{
 			if(bp_is_blog_page())
 			{
-				if(get_option('chk_robots_for_pages') == "on")			
+				if(get_option('chk_robots_for_pages') == "on")
 				{
 					if(get_option('chk_overide_local_setting_for_pages') == "on")
 					{
@@ -59,6 +61,7 @@ Author URI: http://www.ask-oracle.com/
 			}
 			else
 			{
+				global $bp;
 				if(bp_is_page('activity'))
 				{
 					if(get_option('chk_robots_for_buddypress_activity') == "on")
@@ -115,35 +118,76 @@ Author URI: http://www.ask-oracle.com/
 				}
 				if(bp_is_page('groups'))
 				{
-					if(get_option('chk_robots_for_buddypress_groups_main') == "on")
+					if($bp->groups->current_group->id)
 					{
-						if(get_option('chk_noindex_for_buddypress_groups_main') == "on")
-						{
-							$noindex = "noindex";
-						}
-						else
-						{
-							$noindex = "index";
-						}
-						if(get_option('chk_nofollow_for_buddypress_groups_main') == "on")
-						{
-							$nofollow = "nofollow";
-						}
-						else
-						{
-							$nofollow = "follow";
-						}
-						if(!($noindex == "index" && $nofollow == "follow"))
+						//bp_get_current_group_slug();
+						$group_id = $bp->groups->current_group->id;
+						$group = groups_get_group( array( 'group_id' => $group_id ) );
+						if($group->status == "private")
 						{
 							echo '<!-- onsite seo plugin -->';
-							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+							echo '<meta name="robots" content="noindex, nofollow" />'."\n";
+						}
+						else
+						{
+							if(get_option('chk_robots_for_buddypress_groups_main') == "on")
+							{
+								if(get_option('chk_noindex_for_buddypress_groups_main') == "on")
+								{
+									$noindex = "noindex";
+								}
+								else
+								{
+									$noindex = "index";
+								}
+								if(get_option('chk_nofollow_for_buddypress_groups_main') == "on")
+								{
+									$nofollow = "nofollow";
+								}
+								else
+								{
+									$nofollow = "follow";
+								}
+								if(!($noindex == "index" && $nofollow == "follow"))
+								{
+									echo '<!-- onsite seo plugin -->';
+									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+								}
+							}
+						}
+					}
+					else
+					{
+						if(get_option('chk_robots_for_buddypress_groups_main') == "on")
+						{
+							if(get_option('chk_noindex_for_buddypress_groups_main') == "on")
+							{
+								$noindex = "noindex";
+							}
+							else
+							{
+								$noindex = "index";
+							}
+							if(get_option('chk_nofollow_for_buddypress_groups_main') == "on")
+							{
+								$nofollow = "nofollow";
+							}
+							else
+							{
+								$nofollow = "follow";
+							}
+							if(!($noindex == "index" && $nofollow == "follow"))
+							{
+								echo '<!-- onsite seo plugin -->';
+								echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+							}
 						}
 					}
 				}
 				if(bp_is_user_activity())
 				{
 					$curr_action = bp_current_action();
-					$curr_action_for_activity = strtolower($curr_action);
+					$curr_action_for_activity = strtolower($curr_action);				
 					
 					if($curr_action_for_activity == "just-me")
 					{					
@@ -286,34 +330,44 @@ Author URI: http://www.ask-oracle.com/
 				}
 				else if(bp_is_user_profile())
 				{
+					global $current_user;
 					$curr_action = bp_current_action();
 					$curr_action_for_profile = strtolower($curr_action);
-					
-					if($curr_action_for_profile == "public")
-					{					
-						if(get_option('chk_robots_for_buddypress_profile_public') == "on")
+					$user_id = $current_user->ID;
+					$field = xprofile_get_field_data('3', $user_id);
+					if(strtolower($field) == "yes")
+					{
+						echo '<!-- onsite seo plugin -->';
+						echo '<meta name="robots" content="noindex, nofollow" />'."\n";
+					}
+					else
+					{
+						if($curr_action_for_profile == "public")
 						{
-								if(get_option('chk_noindex_for_buddypress_profile_public') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_profile_public') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}				
+							if(get_option('chk_robots_for_buddypress_profile_public') == "on")
+							{
+									if(get_option('chk_noindex_for_buddypress_profile_public') == "on")
+									{
+										$noindex = "noindex";
+									}
+									else
+									{
+										$noindex = "index";
+									}
+									if(get_option('chk_nofollow_for_buddypress_profile_public') == "on")
+									{
+										$nofollow = "nofollow";
+									}
+									else
+									{
+										$nofollow = "follow";
+									}
+									if(!($noindex == "index" && $nofollow == "follow"))
+									{
+										echo '<!-- onsite seo plugin -->';
+										echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+									}				
+							}
 						}
 					}					
 				} // else if ends here
@@ -489,19 +543,16 @@ Author URI: http://www.ask-oracle.com/
 		}
 		else
 		{
-			$args=array('public'   => true,'_builtin' => false);
-			$output = 'names'; // names or objects, note names is the default
-			$operator = 'and'; // 'and' or 'or'
-			$post_types=get_post_types($args,$output,$operator);
-			$chk_overide_local_setting_for_custom_post_type = 'chk_overide_local_setting_for_' . $post->post_type;
-			$chk_robots_for_custom_post_type = "chk_robots_for_" . $post->post_type;
-				if(get_option($chk_robots_for_custom_post_type) == "on")
-				{
-					if(get_option($chk_overide_local_setting_for_custom_post_type) == "on")
+			if (!is_singular('product'))
+			{
+				$shop_page = get_post(woocommerce_get_page_id('shop'));
+				$post_id = $shop_page->ID;
+				//$post_id
+				if(get_option('chk_robots_for_pages') == "on")
+				{				
+					if(get_option('chk_overide_local_setting_for_pages') == "on")
 					{
-						$noindex_post_type = 'chk_noindex_for_' . $post->post_type;
-						$nofollow_post_type = 'chk_nofollow_for_' . $post->post_type;
-						if(get_option($noindex_post_type) == "on")
+						if(get_option('chk_noindex_for_pages') == "on")
 						{
 							$noindex = "noindex";
 						}
@@ -509,7 +560,7 @@ Author URI: http://www.ask-oracle.com/
 						{
 							$noindex = "index";
 						}
-						if(get_option($nofollow_post_type) == "on")
+						if(get_option('chk_nofollow_for_pages') == "on")
 						{
 							$nofollow = "nofollow";
 						}
@@ -520,7 +571,7 @@ Author URI: http://www.ask-oracle.com/
 						if(!($noindex == "index" && $nofollow == "follow"))
 						{
 							echo '<!-- onsite seo plugin -->';
-							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";							
 						}
 					}
 					else
@@ -535,8 +586,61 @@ Author URI: http://www.ask-oracle.com/
 							}
 						}
 					}
-				}	
+				}
+				
+
 			}
+			else
+			{
+				$args=array('public'   => true,'_builtin' => false);
+				$output = 'names'; // names or objects, note names is the default
+				$operator = 'and'; // 'and' or 'or'
+				$post_types=get_post_types($args,$output,$operator);
+				$chk_overide_local_setting_for_custom_post_type = 'chk_overide_local_setting_for_' . $post->post_type;
+				$chk_robots_for_custom_post_type = "chk_robots_for_" . $post->post_type;
+					if(get_option($chk_robots_for_custom_post_type) == "on")
+					{
+						if(get_option($chk_overide_local_setting_for_custom_post_type) == "on")
+						{
+							$noindex_post_type = 'chk_noindex_for_' . $post->post_type;
+							$nofollow_post_type = 'chk_nofollow_for_' . $post->post_type;
+							if(get_option($noindex_post_type) == "on")
+							{
+								$noindex = "noindex";
+							}
+							else
+							{
+								$noindex = "index";
+							}
+							if(get_option($nofollow_post_type) == "on")
+							{
+								$nofollow = "nofollow";
+							}
+							else
+							{
+								$nofollow = "follow";
+							}
+							if(!($noindex == "index" && $nofollow == "follow"))
+							{
+								echo '<!-- onsite seo plugin -->';
+								echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+							}
+						}
+						else
+						{
+							if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+							{
+								$meta_value_onsite_robots_for_frontend = get_post_meta($post_id, "onsite_robots_for_frontend", true);
+								if($meta_value_onsite_robots_for_frontend != "index, follow")
+								{
+									echo '<!-- onsite seo plugin -->';
+									echo '<meta name="robots" content="'.$meta_value_onsite_robots_for_frontend.'" />'."\n";
+								}
+							}
+						}
+					}	
+			}
+		}	
 	}
 	function setup_onsite_seo_admin_menus()
 	{
