@@ -13,111 +13,41 @@ Author URI: http://www.ask-oracle.com/
 		$post_id = $post->ID;
 		$post_type = $post->post_type;
 		
-				
-		
+						
 		if(trim($post->post_type) == "page")
 		{
 			if(bp_is_blog_page())
 			{
-				if(get_option('chk_robots_for_pages') == "on")
-				{
-					if(get_option('chk_overide_local_setting_for_pages') == "on")
-					{
-						if(get_option('chk_noindex_for_pages') == "on")
-						{
-							$noindex = "noindex";
-						}
-						else
-						{
-							$noindex = "index";
-						}
-						if(get_option('chk_nofollow_for_pages') == "on")
-						{
-							$nofollow = "nofollow";
-						}
-						else
-						{
-							$nofollow = "follow";
-						}
-						if(!($noindex == "index" && $nofollow == "follow"))
-						{
-							echo '<!-- onsite seo plugin -->';
-							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";							
-						}
-					}
-					else
-					{
-						if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
-						{
-							set_post_meta_robot_tag($post_id, "onsite_robots_for_frontend", true);
-						}
-					}
-				}
+				$option_name_for_post_type = "chk_robots_for_pages";
+				$option_name_for_global_override_local = "chk_overide_local_setting_for_pages";
+				$option_name_noindex_for_post_type = "chk_noindex_for_pages";
+				$option_name_nofollow_for_post_type = "chk_nofollow_for_pages";
+				
+				override_local_setting_section_to_display_frontend_robot($option_name_for_post_type,$option_name_for_global_override_local,$option_name_noindex_for_post_type,$option_name_nofollow_for_post_type);
 			}
 			else
 			{
 				global $bp;
 				if(bp_is_page('activity'))
 				{
-					if(get_option('chk_robots_for_buddypress_activity') == "on")
-					{
-						if(get_option('chk_noindex_for_buddypress_activity') == "on")
-						{
-							$noindex = "noindex";
-						}
-						else
-						{
-							$noindex = "index";
-						}
-						if(get_option('chk_nofollow_for_buddypress_activity') == "on")
-						{
-							$nofollow = "nofollow";
-						}
-						else
-						{
-							$nofollow = "follow";
-						}
-						if(!($noindex == "index" && $nofollow == "follow"))
-						{
-							echo '<!-- onsite seo plugin -->';
-							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-						}
-					}					
+					$option_name = "chk_robots_for_buddypress_activity";
+					$option_name_noindex = "chk_noindex_for_buddypress_activity";
+					$option_name_nofollow = "chk_nofollow_for_buddypress_activity";
+					display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 				}
 				if(bp_is_page('forums'))
 				{
-					if(get_option('chk_robots_for_buddypress_forums') == "on")
-					{
-						if(get_option('chk_noindex_for_buddypress_forums') == "on")
-						{
-							$noindex = "noindex";
-						}
-						else
-						{
-							$noindex = "index";
-						}
-						if(get_option('chk_nofollow_for_buddypress_forums') == "on")
-						{
-							$nofollow = "nofollow";
-						}
-						else
-						{
-							$nofollow = "follow";
-						}
-						if(!($noindex == "index" && $nofollow == "follow"))
-						{
-							echo '<!-- onsite seo plugin -->';
-							echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-						}
-					}
+					$option_name = "chk_robots_for_buddypress_forums";
+					$option_name_noindex = "chk_noindex_for_buddypress_forums";
+					$option_name_nofollow = "chk_nofollow_for_buddypress_forums";
+					display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 				}
 				if(bp_is_page('groups'))
 				{
 					if($bp->groups->current_group->id)
 					{
-						//bp_get_current_group_slug();
 						$group_id = $bp->groups->current_group->id;
-						$group = groups_get_group( array( 'group_id' => $group_id ) );
+						$group = groups_get_group(array('group_id' => $group_id));
 						if($group->status == "private")
 						{
 							echo '<!-- onsite seo plugin -->';
@@ -125,58 +55,18 @@ Author URI: http://www.ask-oracle.com/
 						}
 						else
 						{
-							if(get_option('chk_robots_for_buddypress_groups_main') == "on")
-							{
-								if(get_option('chk_noindex_for_buddypress_groups_main') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_groups_main') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-							}
+							$option_name = "chk_robots_for_buddypress_groups_main";
+							$option_name_noindex = "chk_noindex_for_buddypress_groups_main";
+							$option_name_nofollow = "chk_nofollow_for_buddypress_groups_main";
+							display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 						}
 					}
 					else
 					{
-						if(get_option('chk_robots_for_buddypress_groups_main') == "on")
-						{
-							if(get_option('chk_noindex_for_buddypress_groups_main') == "on")
-							{
-								$noindex = "noindex";
-							}
-							else
-							{
-								$noindex = "index";
-							}
-							if(get_option('chk_nofollow_for_buddypress_groups_main') == "on")
-							{
-								$nofollow = "nofollow";
-							}
-							else
-							{
-								$nofollow = "follow";
-							}
-							if(!($noindex == "index" && $nofollow == "follow"))
-							{
-								echo '<!-- onsite seo plugin -->';
-								echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-							}
-						}
+						$option_name = "chk_robots_for_buddypress_groups_main";
+						$option_name_noindex = "chk_noindex_for_buddypress_groups_main";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_groups_main";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 					}
 				}
 				if(bp_is_user_activity())
@@ -185,142 +75,42 @@ Author URI: http://www.ask-oracle.com/
 					$curr_action_for_activity = strtolower($curr_action);				
 					
 					if($curr_action_for_activity == "just-me")
-					{					
-						if(get_option('chk_robots_for_buddypress_members_activity') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_members_activity') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_members_activity') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}				
-						}
+					{
+						$option_name = "chk_robots_for_buddypress_members_activity";
+						$option_name_noindex = "chk_noindex_for_buddypress_members_activity";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_members_activity";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 					}
 					
 					if($curr_action_for_activity == "mentions")
 					{
-						if(get_option('chk_robots_for_buddypress_members_mentions') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_members_mentions') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_members_mentions') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-						}
+						$option_name = "chk_robots_for_buddypress_members_mentions";
+						$option_name_noindex = "chk_noindex_for_buddypress_members_mentions";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_members_mentions";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 					}
 
 					if($curr_action_for_activity == "favorites")
 					{
-						if(get_option('chk_robots_for_buddypress_members_favorites') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_members_favorites') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_members_favorites') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-						}
+						$option_name = "chk_robots_for_buddypress_members_favorites";
+						$option_name_noindex = "chk_noindex_for_buddypress_members_favorites";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_members_favorites";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);					
 					}
 					
 					if($curr_action_for_activity == "friends")
 					{
-						if(get_option('chk_robots_for_buddypress_members_friends') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_members_friends') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_members_friends') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-						}
+						$option_name = "chk_robots_for_buddypress_members_friends";
+						$option_name_noindex = "chk_noindex_for_buddypress_members_friends";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_members_friends";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 					}
 					if($curr_action_for_activity == "groups")
 					{
-						if(get_option('chk_robots_for_buddypress_members_groups') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_members_groups') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_members_groups') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-						}
+						$option_name = "chk_robots_for_buddypress_members_groups";
+						$option_name_noindex = "chk_noindex_for_buddypress_members_groups";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_members_groups";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);					
 					}
 				}
 				else if(bp_is_user_profile())
@@ -339,99 +129,39 @@ Author URI: http://www.ask-oracle.com/
 					{
 						if($curr_action_for_profile == "public")
 						{
-							if(get_option('chk_robots_for_buddypress_profile_public') == "on")
-							{
-									if(get_option('chk_noindex_for_buddypress_profile_public') == "on")
-									{
-										$noindex = "noindex";
-									}
-									else
-									{
-										$noindex = "index";
-									}
-									if(get_option('chk_nofollow_for_buddypress_profile_public') == "on")
-									{
-										$nofollow = "nofollow";
-									}
-									else
-									{
-										$nofollow = "follow";
-									}
-									if(!($noindex == "index" && $nofollow == "follow"))
-									{
-										echo '<!-- onsite seo plugin -->';
-										echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-									}				
-							}
+							$option_name = "chk_robots_for_buddypress_profile_public";
+							$option_name_noindex = "chk_noindex_for_buddypress_profile_public";
+							$option_name_nofollow = "chk_nofollow_for_buddypress_profile_public";
+							display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 						}
 					}					
-				} // else if ends here
+				}
 				else if(bp_is_user_friends())
 				{
 					$curr_action = bp_current_action();
 					$curr_action_for_friends = strtolower($curr_action);
 					
 					if($curr_action_for_friends == "my-friends")
-					{					
-						if(get_option('chk_robots_for_buddypress_friends_friendship') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_friends_friendship') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_friends_friendship') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}				
-						}
+					{
+						$option_name = "chk_robots_for_buddypress_friends_friendship";
+						$option_name_noindex = "chk_noindex_for_buddypress_friends_friendship";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_friends_friendship";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);					
 					}
-				} // else if ends here
+				}
 				else if(bp_is_user_groups())
 				{
 					$curr_action = bp_current_action();
 					$curr_action_for_groups = strtolower($curr_action);
-					//my-groups //invites
+					
 					if($curr_action_for_groups == "my-groups")
 					{
-						if(get_option('chk_robots_for_buddypress_groups') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_groups') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_groups') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-						}
+						$option_name = "chk_robots_for_buddypress_groups";
+						$option_name_noindex = "chk_noindex_for_buddypress_groups";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_groups";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 					}
-				} // else if ends here
+				}
 				else if(bp_is_user_forums())
 				{
 					$curr_action = bp_current_action();
@@ -439,178 +169,57 @@ Author URI: http://www.ask-oracle.com/
 
 					if($curr_action_for_forums == "topics")
 					{
-						if(get_option('chk_robots_for_buddypress_members_forums_topics') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_members_forums_topics') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_members_forums_topics') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-						}
+						$option_name = "chk_robots_for_buddypress_members_forums_topics";
+						$option_name_noindex = "chk_noindex_for_buddypress_members_forums_topics";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_members_forums_topics";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);					
 					}
 					else if($curr_action_for_forums == "replies")
 					{
-						if(get_option('chk_robots_for_buddypress_members_forums_replied') == "on")
-						{
-								if(get_option('chk_noindex_for_buddypress_members_forums_replied') == "on")
-								{
-									$noindex = "noindex";
-								}
-								else
-								{
-									$noindex = "index";
-								}
-								if(get_option('chk_nofollow_for_buddypress_members_forums_replied') == "on")
-								{
-									$nofollow = "nofollow";
-								}
-								else
-								{
-									$nofollow = "follow";
-								}
-								if(!($noindex == "index" && $nofollow == "follow"))
-								{
-									echo '<!-- onsite seo plugin -->';
-									echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-								}
-						}
+						$option_name = "chk_robots_for_buddypress_members_forums_replied";
+						$option_name_noindex = "chk_noindex_for_buddypress_members_forums_replied";
+						$option_name_nofollow = "chk_nofollow_for_buddypress_members_forums_replied";
+						display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow);
 					}
-				} // else if ends here for forums
+				}
 			}			
 		}
 		else if(trim($post->post_type) == "post")
 		{
-			if(get_option('chk_robots_for_post') == "on")
-			{
-				if(get_option('chk_overide_local_setting_for_post') == "on")
-				{
-					if(get_option('chk_noindex_for_post') == "on")
-					{
-						$noindex = "noindex";
-					}
-					else
-					{
-						$noindex = "index";
-					}
-					if(get_option('chk_nofollow_for_post') == "on")
-					{
-						$nofollow = "nofollow";
-					}
-					else
-					{
-						$nofollow = "follow";
-					}
-					if(!($noindex == "index" && $nofollow == "follow"))
-					{
-						echo '<!-- onsite seo plugin -->';
-						echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-					}
-				}
-				else
-				{
-					set_post_meta_robot_tag($post_id, "onsite_robots_for_frontend", true);
-				}
-			}	
+			$option_name_for_post_type = "chk_robots_for_post";
+			$option_name_for_global_override_local = "chk_overide_local_setting_for_post";
+			$option_name_noindex_for_post_type = "chk_noindex_for_post";
+			$option_name_nofollow_for_post_type = "chk_nofollow_for_post";
+				
+			override_local_setting_section_to_display_frontend_robot($option_name_for_post_type,$option_name_for_global_override_local,$option_name_noindex_for_post_type,$option_name_nofollow_for_post_type);
 		}
 		else
 		{	
-			if (in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
-			{	
-				if(woocommerce_get_page_id('shop'))
-				{
+			if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && woocommerce_get_page_id('shop'))
+			{
 					$shop_page = get_post(woocommerce_get_page_id('shop'));
 					$post_id = $shop_page->ID;
-					//$post_id
-					if(get_option('chk_robots_for_pages') == "on")
-					{				
-						if(get_option('chk_overide_local_setting_for_pages') == "on")
-						{
-							if(get_option('chk_noindex_for_pages') == "on")
-							{
-								$noindex = "noindex";
-							}
-							else
-							{
-								$noindex = "index";
-							}
-							if(get_option('chk_nofollow_for_pages') == "on")
-							{
-								$nofollow = "nofollow";
-							}
-							else
-							{
-								$nofollow = "follow";
-							}
-							if(!($noindex == "index" && $nofollow == "follow"))
-							{
-								echo '<!-- onsite seo plugin -->';
-								echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";							
-							}
-						}
-						else
-						{
-							set_post_meta_robot_tag($post_id, "onsite_robots_for_frontend", true);
-						}
-					}					
-				}
+					
+					$option_name_for_post_type = "chk_robots_for_pages";
+					$option_name_for_global_override_local = "chk_overide_local_setting_for_pages";
+					$option_name_noindex_for_post_type = "chk_noindex_for_pages";
+					$option_name_nofollow_for_post_type = "chk_nofollow_for_pages";
+											
+					override_local_setting_section_to_display_frontend_robot($option_name_for_post_type,$option_name_for_global_override_local,$option_name_noindex_for_post_type,$option_name_nofollow_for_post_type);
 			}	
 			else
 			{
-				$args=array('public'   => true,'_builtin' => false);
-				$output = 'names'; // names or objects, note names is the default
-				$operator = 'and'; // 'and' or 'or'
+				$args = array('public' => true,'_builtin' => false);
+				$output = 'names';
+				$operator = 'and';
 				$post_types = get_post_types($args,$output,$operator);
-				$chk_overide_local_setting_for_custom_post_type = 'chk_overide_local_setting_for_' . $post->post_type;
-				$chk_robots_for_custom_post_type = "chk_robots_for_" . $post->post_type;
-					if(get_option($chk_robots_for_custom_post_type) == "on")
-					{
-						if(get_option($chk_overide_local_setting_for_custom_post_type) == "on")
-						{
-							$noindex_post_type = 'chk_noindex_for_' . $post->post_type;
-							$nofollow_post_type = 'chk_nofollow_for_' . $post->post_type;
-							if(get_option($noindex_post_type) == "on")
-							{
-								$noindex = "noindex";
-							}
-							else
-							{
-								$noindex = "index";
-							}
-							if(get_option($nofollow_post_type) == "on")
-							{
-								$nofollow = "nofollow";
-							}
-							else
-							{
-								$nofollow = "follow";
-							}
-							if(!($noindex == "index" && $nofollow == "follow"))
-							{
-								echo '<!-- onsite seo plugin -->';
-								echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
-							}
-						}
-						else
-						{							
-							set_post_meta_robot_tag($post_id, "onsite_robots_for_frontend", true);
-						}
-					}	
+				
+				$option_name_for_post_type = "chk_robots_for_"  . $post->post_type;
+				$option_name_for_global_override_local = "chk_overide_local_setting_for_" . $post->post_type;
+				$option_name_noindex_for_post_type = "chk_noindex_for_" . $post->post_type;
+				$option_name_nofollow_for_post_type = "chk_nofollow_for_" . $post->post_type;
+					
+				override_local_setting_section_to_display_frontend_robot($option_name_for_post_type,$option_name_for_global_override_local,$option_name_noindex_for_post_type,$option_name_nofollow_for_post_type);
 			}
 		}	
 	}
@@ -627,7 +236,6 @@ Author URI: http://www.ask-oracle.com/
 		}
 		add_meta_box('onsite_meta_robots', 'Onsite SEO Meta Robots', 'onsite_meta_robots_dropdown_box', 'post', 'side', 'low');
 		add_meta_box('onsite_meta_robots', 'Onsite SEO Meta Robots', 'onsite_meta_robots_dropdown_box', 'page', 'side', 'low');
-		
 	}
 	function theme_onsiteseo_settings_page()
 	{
@@ -1048,6 +656,84 @@ Author URI: http://www.ask-oracle.com/
 		}
 		return $noindex . "," . $nofollow;
 	}
+	/* 
+		Function override_local_setting_section_to_display_frontend_robot - Begins here
+		Description :- 
+	*/
+	function override_local_setting_section_to_display_frontend_robot($option_name_for_post_type,$option_name_for_global_override_local,$option_name_noindex_for_post_type,$option_name_nofollow_for_post_type)
+	{		
+		if(get_option($option_name_for_post_type) == "on")
+		{
+			if(get_option($option_name_for_global_override_local) == "on")
+			{
+				if(get_option($option_name_noindex_for_post_type) == "on")
+				{
+					$noindex = "noindex";
+				}
+				else
+				{
+					$noindex = "index";
+				}
+				if(get_option($option_name_nofollow_for_post_type) == "on")
+				{
+					$nofollow = "nofollow";
+				}
+				else
+				{
+					$nofollow = "follow";
+				}
+				if(!($noindex == "index" && $nofollow == "follow"))
+				{
+					echo '<!-- onsite seo plugin -->';
+					echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+				}
+			}
+			else
+			{
+				if(get_post_meta($post_id, "onsite_robots_for_frontend", true))
+				{
+					set_post_meta_robot_tag($post_id, "onsite_robots_for_frontend", true);
+				}
+			}
+		}		
+	}
+	/* 
+		Function override_local_setting_section_to_display_frontend_robot - Ends here
+	*/	
+	/* 
+		Function display_frontend_robots_tag - Begins here
+		Description :- 
+	*/
+	function display_frontend_robots_tag($option_name,$option_name_noindex,$option_name_nofollow)
+	{
+		if(get_option($option_name) == "on")
+		{
+			if(get_option($option_name_noindex) == "on")
+			{
+				$noindex = "noindex";
+			}
+			else
+			{
+				$noindex = "index";
+			}
+			if(get_option($option_name_nofollow) == "on")
+			{
+				$nofollow = "nofollow";
+			}
+			else
+			{
+				$nofollow = "follow";
+			}
+			if(!($noindex == "index" && $nofollow == "follow"))
+			{
+				echo '<!-- onsite seo plugin -->';
+				echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
+			}
+		}
+	}
+	/* 
+		Function display_frontend_robots_tag - Ends here
+	*/		
 ?>
 <?php
 add_action("admin_menu", "setup_onsite_seo_admin_menus");
