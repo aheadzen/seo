@@ -15,7 +15,7 @@ class adminSEOPlus
 		$post_types = get_post_types($args,$output,$operator);
 		foreach ($post_types  as $post_type)
 		{
-			add_meta_box('seoplus_meta_robots', 'SEO PLUS Meta Robots', 'seoplus_meta_robots_checkboxes', $post_type, 'side', 'low');
+			add_meta_box('seoplus_meta_robots', 'SEO PLUS Meta Robots', array(&$this, 'seoplus_meta_robots_checkboxes'), $post_type, 'side', 'low');
 		}
 		add_meta_box('seoplus_meta_robots', 'SEO PLUS Meta Robots', array(&$this, 'seoplus_meta_robots_checkboxes'), 'post', 'side', 'low');
 		add_meta_box('seoplus_meta_robots', 'SEO PLUS Meta Robots', array(&$this, 'seoplus_meta_robots_checkboxes'), 'page', 'side', 'low');
@@ -46,8 +46,8 @@ class adminSEOPlus
 		echo '<fieldset id="mycustom-div">';
 		echo '<div>';
 		echo '<p>';
-		echo '<input type="checkbox" id="'.adminSEOPlus::GLOBAL_OPTION_NOINDEX.'" name="'.adminSEOPlus::GLOBAL_OPTION_NOINDEX.'" "'.$$chk_checked_noindex.'"/>&nbsp;&nbsp;&nbsp;&nbsp;NOINDEX<br />';
-		echo '<input type="checkbox" id="'.adminSEOPlus::GLOBAL_OPTION_NOFOLLOW.'" name="'.adminSEOPlus::GLOBAL_OPTION_NOFOLLOW.'" "'.$chk_checked_nofollow.'"/>&nbsp;&nbsp;&nbsp;&nbsp;NOFOLLOW';
+		echo '<input type="checkbox" id="'.adminSEOPlus::GLOBAL_OPTION_NOINDEX.'" name="'.adminSEOPlus::GLOBAL_OPTION_NOINDEX.'" '.$chk_checked_noindex.'>&nbsp;&nbsp;&nbsp;&nbsp;NOINDEX<br />';
+		echo '<input type="checkbox" id="'.adminSEOPlus::GLOBAL_OPTION_NOFOLLOW.'" name="'.adminSEOPlus::GLOBAL_OPTION_NOFOLLOW.'" '.$chk_checked_nofollow.'>&nbsp;&nbsp;&nbsp;&nbsp;NOFOLLOW';
 		echo '</p>';
 		echo '</div>';
 		echo '</fieldset>';
@@ -69,5 +69,49 @@ class adminSEOPlus
 			$nofollow = "nofollow";
 		return $noindex . "," . $nofollow;
 	}
+	function meta_robots_save_post()
+	{
+		global $post;
+		$post_id = $post->ID;
+		$noindex = $_POST[adminSEOPlus::GLOBAL_OPTION_NOINDEX];
+		$nofollow = $_POST[adminSEOPlus::GLOBAL_OPTION_NOFOLLOW];
+		
+		if((isset($noindex) && !empty($noindex)) && (isset($nofollow) && !empty($nofollow)))
+		{
+			$value = array('noindex' => true, "nofollow" => true);
+			$value = serialize($value);
+		}	
+		else if((!isset($noindex) && empty($noindex)) && (isset($nofollow) && !empty($nofollow)))
+		{
+			$value = array('noindex' => false, "nofollow" => true);
+			$value = serialize($value);
+		}	
+		else if((isset($noindex) && !empty($noindex)) && (!isset($nofollow) && empty($nofollow)))
+		{
+			$value = array('noindex' => true, "nofollow" => false);
+			$value = serialize($value);
+		}	
+		else
+		{
+			$value = array('noindex' => false, "nofollow" => false);
+			$value = serialize($value);
+		}
+		$new_meta_value = ( isset( $value ) ? $value : '' );
+		$meta_key = adminSEOPlus::SEOPLUS_META_ROBOT_VALUE;
+		$meta_value = get_post_meta($post_id, $meta_key, true);
+				
+		if($new_meta_value && '' == $meta_value)
+		{
+			add_post_meta($post_id, $meta_key, $new_meta_value, true);
+		}
+		elseif($new_meta_value && $new_meta_value != $meta_value)
+		{
+			update_post_meta($post_id, $meta_key, $new_meta_value);	
+		}	
+		elseif ('' == $new_meta_value && $meta_value)
+		{
+			delete_post_meta($post_id, $meta_key, $meta_value);
+		}	
+	}	
 }
 ?>
