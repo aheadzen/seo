@@ -112,6 +112,28 @@ class adminSEOPlus
 		{
 			delete_post_meta($post_id, $meta_key, $meta_value);
 		}	
-	}	
+	}
+	/* This function will get all the active buddypress components */
+	function get_all_active_buddypress_componenets()
+	{
+		global $bp;
+		$active_components = array();
+		$i = 0;
+		while (list($key, $value) = each($bp->active_components))
+		{
+			if($value == 1)
+			{
+				$active_components[$i] = $key;
+			}
+			$i++;
+		}
+		$exclude_components = array('xprofile','settings','friends','messages','blogs');
+		$final_component_list = array_values(array_diff($active_components,$exclude_components));
+		return $final_component_list;
+	}
+	/* Generate options for active buddypress components */
+	function generate_options_for_active_buddypress_components()
+	{
+	}
 }
 ?>
