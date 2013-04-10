@@ -511,7 +511,7 @@ class frontendSEOPlus
 		}
 		
 		$title = preg_replace( '|<span>[0-9]+</span>|', '', $title );
-		echo $title;
+		return $title;
 	}
 	function set_page_title_for_member_pages($ignore_action)
 	{
