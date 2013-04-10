@@ -143,11 +143,14 @@ class frontendSEOPlus
 	{
 		global $post;
 		
-		if(is_shop())
+		if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) )
 		{
-			$shop_page = get_post(woocommerce_get_page_id('shop'));
-			$post_id = $shop_page->ID;
-		}
+			if(is_shop())
+			{
+				$shop_page = get_post(woocommerce_get_page_id('shop'));
+				$post_id = $shop_page->ID;
+			}
+		}	
 		else
 		{
 			$post_id = $post->ID;
@@ -280,17 +283,56 @@ class frontendSEOPlus
 					{
 						$title .= $this->set_page_title_for_member_pages('just-me');
 					}
-					echo $activity_component_action;
+					$title = $activity_component_action;
 				}
 			}
-			else if($bp->current_component == "profile")
+			else if($bp->current_component == "profile" || $bp->current_component == "xprofile")
 			{
 				if(bp_is_active('profile') || bp_is_active('xprofile'))
 				{
-					if (!empty( $bp->displayed_user->fullname ) && !is_404())
+					$profile_component_action = get_option('txt_profile_component_action');
+					if(isset($profile_component_action) && !empty($profile_component_action))
+					{
+						if(preg_match_all('/\%(.*?)\%/',$profile_component_action,$match))
+						{
+								for($k=0;$k<count($match[1]);$k++)
+								{
+									if($match[1][$k] == "member_name")
+									{
+										
+										$search = "%" . "member_name" . "%";
+										if($bp->displayed_user->fullname)
+										{
+											$replace = $bp->displayed_user->fullname;
+										}	
+										$profile_component_action = str_replace($search,$replace,$profile_component_action);
+									}
+									else if($match[1][$k] == "component_name")
+									{
+										$search = "%" . "component_name" . "%";
+										if(bp_current_component())
+										{											
+											$replace = ucwords(bp_current_component());
+										}	
+										$profile_component_action = str_replace($search,$replace,$profile_component_action);
+									}
+									else if($match[1][$k] == "action_name")
+									{
+										$search = "%" . "action_name" . "%";
+										if(bp_current_action())
+										{											
+											$replace = ucwords(bp_current_action());
+										}	
+										$profile_component_action = str_replace($search,$replace,$profile_component_action);
+									}
+								}
+						}
+					}				
+					else if (!empty( $bp->displayed_user->fullname ) && !is_404())
 					{
 						$title .= $this->set_page_title_for_member_pages('public');
 					}
+					$title = $profile_component_action;
 				}
 			}
 			else if($bp->current_component == "friends")
@@ -370,7 +412,7 @@ class frontendSEOPlus
 		}
 		
 		$title = preg_replace( '|<span>[0-9]+</span>|', '', $title );
-		//echo $title;
+		echo $title;
 	}
 	function set_page_title_for_member_pages($ignore_action)
 	{
