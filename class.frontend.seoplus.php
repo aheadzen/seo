@@ -235,6 +235,7 @@ class frontendSEOPlus
 	{
 		global $bp, $post, $wp_query, $current_blog;
 		$title = "";
+
 		if(isset($bp->current_component) && isset($bp->current_action) && !empty($bp->current_component) && !empty($bp->current_action))
 		{
 			if($bp->current_component == "activity")
@@ -278,12 +279,12 @@ class frontendSEOPlus
 									}
 								}
 						}
+						$title = $activity_component_action;
 					}
 					else if(!empty($bp->displayed_user->fullname) && !is_404())
 					{
 						$title .= $this->set_page_title_for_member_pages('just-me');
-					}
-					$title = $activity_component_action;
+					}					
 				}
 			}
 			else if($bp->current_component == "profile" || $bp->current_component == "xprofile")
@@ -327,31 +328,117 @@ class frontendSEOPlus
 									}
 								}
 						}
+						$title = $profile_component_action;
 					}				
 					else if (!empty( $bp->displayed_user->fullname ) && !is_404())
 					{
 						$title .= $this->set_page_title_for_member_pages('public');
 					}
-					$title = $profile_component_action;
 				}
 			}
 			else if($bp->current_component == "friends")
 			{
 				if(bp_is_active('friends'))
 				{
-					if (!empty( $bp->displayed_user->fullname ) && !is_404())
+					$friends_component_action = get_option('txt_friends_component_action');
+					if(isset($friends_component_action) && !empty($friends_component_action))
+					{
+						if(preg_match_all('/\%(.*?)\%/',$friends_component_action,$match))
+						{
+								for($k=0;$k<count($match[1]);$k++)
+								{
+									if($match[1][$k] == "member_name")
+									{
+										$search = "%" . "member_name" . "%";
+										if($bp->displayed_user->fullname)
+										{
+											$replace = $bp->displayed_user->fullname;
+										}
+										$friends_component_action = str_replace($search,$replace,$friends_component_action);
+									}
+									else if($match[1][$k] == "component_name")
+									{
+										$search = "%" . "component_name" . "%";
+										if(bp_current_component())
+										{
+											$replace = ucwords(bp_current_component());
+										}
+										$friends_component_action = str_replace($search,$replace,$friends_component_action);
+									}
+									else if($match[1][$k] == "action_name")
+									{
+										$search = "%" . "action_name" . "%";
+										if(bp_current_action())
+										{
+											$replace = ucwords(bp_current_action());
+										}
+										$friends_component_action = str_replace($search,$replace,$friends_component_action);
+									}
+								}
+						}
+						$title = $friends_component_action;
+					}
+					else if(!empty( $bp->displayed_user->fullname ) && !is_404())
 					{
 						$title .= $this->set_page_title_for_member_pages('');
 					}
-				}	
+				}
 			}
 			else if($bp->current_component == "groups")
 			{
 				if(bp_is_active('groups'))
 				{
-					if (!empty( $bp->displayed_user->fullname ) && !is_404())
+					$groups_component_action = get_option('txt_groups_component_action');
+					if(isset($groups_component_action) && !empty($groups_component_action))
 					{
-						$title .= $this->set_page_title_for_member_pages('my-groups');
+						if(preg_match_all('/\%(.*?)\%/',$groups_component_action,$match))
+						{							
+								for($k=0;$k<count($match[1]);$k++)
+								{
+									if($match[1][$k] == "group_name")
+									{
+										$search = "%" . "group_name" . "%";
+										if($bp->bp_options_title)
+										{
+											$replace = $bp->bp_options_title;
+										}	
+										$groups_component_action = str_replace($search,$replace,$groups_component_action);
+									}
+									else if($match[1][$k] == "component_name")
+									{
+										$search = "%" . "component_name" . "%";
+										if(bp_current_component())
+										{											
+											$replace = ucwords(bp_current_component());
+										}	
+										$groups_component_action = str_replace($search,$replace,$groups_component_action);
+									}
+									else if($match[1][$k] == "action_name")
+									{
+										$search = "%" . "action_name" . "%";
+										if(bp_current_action())
+										{											
+											$replace = ucwords($bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name']);
+										}	
+										$groups_component_action = str_replace($search,$replace,$groups_component_action);
+									}
+								}
+						}
+						$title = $groups_component_action;
+						/* Static Code for forum */
+							if (bp_is_current_action('forum') && bp_is_action_variable('topic', 0))
+							{
+								if (bp_has_forum_topic_posts())
+								{
+									$title = bp_get_the_topic_title() . " | ";
+									$subnav = '';
+									if ( isset($_REQUEST['topic_page']) && intval($_REQUEST['topic_page']) != 1 )
+									{
+										$title .= 'Page ' . intval( $_REQUEST['topic_page'] ) . ' | ';
+									}
+								}
+							}
+						/* Static Code for forum Ends Here */
 					}
 					else
 					{
@@ -395,8 +482,20 @@ class frontendSEOPlus
 			}
 			else if($bp->current_component == "groups")
 			{
-				$option_value = get_option('txt_member_component_action');
-			}			
+				$option_value = get_option('txt_groups_component');
+				if(isset($option_value) && !empty($option_value))
+				{
+					$title = $option_value;
+				}				
+			}
+			else if($bp->current_component == "members")
+			{
+				$option_value = get_option('txt_member_component');
+				if(isset($option_value) && !empty($option_value))
+				{
+					$title = $option_value;
+				}				
+			}
 		}
 		if(bp_is_activity_component() && isset($_REQUEST['acpage']) && intval($_REQUEST['acpage']) != 1)
 		{

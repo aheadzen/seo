@@ -4,7 +4,7 @@ Plugin Name: SEO+
 Plugin URI: http://www.ask-oracle.com/
 Description: Generate meta robots based on the selected settings.
 Author: Tapan Sodagar
-Version: 0.1
+Version: 0.2
 Author URI: http://www.ask-oracle.com/
 */
 include(dirname(__FILE__).'/class.admin.seoplus.php');

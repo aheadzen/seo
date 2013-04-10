@@ -151,16 +151,6 @@
 										<td colspan="3"><input type="text" id="txt_member_component" name="txt_member_component" class="seoplustext" value="<?php echo get_option('txt_member_component');?>"/>
 										</td>
 									</tr>
-									<tr valign="top">
-										<td>Member Component / Action Page Option</td>
-										<td colspan="3"><input type="text" id="txt_member_component_action" name="txt_member_component_action" class="seoplustext" value="<?php echo get_option('txt_member_component_action');?>"/>
-										</td>
-									</tr>
-									<tr valign="top">
-										<td>Member Component / Action / Paging Option</td>
-										<td colspan="3"><input type="text" id="txt_member_component_paging" name="txt_member_component_paging" class="seoplustext" value="<?php echo get_option('txt_member_component_paging');?>"/>
-										</td>
-									</tr>
 					<?php
 							}
 							if(bp_is_active('activity'))
@@ -183,6 +173,28 @@
 									</td>
 								</tr>								
 					<?php			
+							}
+							if(bp_is_active('profile') || bp_is_active('xprofile'))
+							{
+								echo "<tr><td colspan='5'><h3>Profile Module Buddypress Options</h3></td><tr>";
+					?>
+								<tr valign="top">
+									<td>Profile Component / Action Page Option</td>
+									<td colspan="3"><input type="text" id="txt_profile_component_action" name="txt_profile_component_action" class="seoplustext" value="<?php echo get_option('txt_profile_component_action');?>"/>
+									</td>
+								</tr>
+					<?php
+							}
+							if(bp_is_active('friends'))
+							{
+								echo "<tr><td colspan='5'><h3>Friends Module Buddypress Options</h3></td><tr>";
+					?>
+								<tr valign="top">
+									<td>Friends Component / Action Page Option</td>
+									<td colspan="3"><input type="text" id="txt_friends_component_action" name="txt_friends_component_action" class="seoplustext" value="<?php echo get_option('txt_friends_component_action');?>"/>
+									</td>
+								</tr>
+					<?php
 							}
 							if(bp_is_active('forums'))
 							{
@@ -215,11 +227,6 @@
 									<td colspan="3"><input type="text" id="txt_groups_component_action" name="txt_groups_component_action" class="seoplustext" value="<?php echo get_option('txt_groups_component_action');?>"/>
 									</td>
 								</tr>
-								<tr valign="top">
-									<td>Groups Component / Action / Paging Option</td>
-									<td colspan="3"><input type="text" id="txt_groups_component_paging" name="txt_groups_component_paging" class="seoplustext" value="<?php echo get_option('txt_groups_component_paging');?>"/>
-									</td>
-								</tr>
 					<?php
 							}
 						}
@@ -229,7 +236,7 @@
 							<?php
 								if($get_all_post_types != "")
 								{
-									$value = "chk_robots_for_page,chk_noindex_for_page,chk_nofollow_for_page,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_page,chk_robots_for_members_activity,chk_noindex_for_members_activity,chk_nofollow_for_members_activity,chk_robots_for_members_mentions,chk_noindex_for_members_mentions,chk_nofollow_for_members_mentions,chk_robots_for_members_favorites,chk_noindex_for_members_favorites,chk_nofollow_for_members_favorites,chk_robots_for_members_friends,chk_noindex_for_members_friends,chk_nofollow_for_members_friends,chk_robots_for_members_groups,chk_noindex_for_members_groups,chk_nofollow_for_members_groups,chk_robots_for_topics,chk_noindex_for_topics,chk_nofollow_for_topics,chk_robots_for_replied,chk_noindex_for_replied,chk_nofollow_for_replied,chk_robots_for_public,chk_noindex_for_public,chk_nofollow_for_public,chk_robots_for_friends,chk_noindex_for_friends,chk_nofollow_for_friends,chk_robots_for_groups,chk_noindex_for_groups,chk_nofollow_for_groups,chk_robots_for_activity,chk_noindex_for_activity,chk_nofollow_for_activity,chk_robots_for_forums,chk_noindex_for_forums,chk_nofollow_for_forums,chk_robots_for_groups_main,chk_noindex_for_groups_main,chk_nofollow_for_groups_main,txt_member_component,txt_member_component_action,txt_member_component_paging,txt_groups_component,txt_groups_component_action,txt_groups_component_paging,txt_activity_component,txt_activity_component_action," . $get_all_post_types;
+									$value = "chk_robots_for_page,chk_noindex_for_page,chk_nofollow_for_page,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_page,chk_robots_for_members_activity,chk_noindex_for_members_activity,chk_nofollow_for_members_activity,chk_robots_for_members_mentions,chk_noindex_for_members_mentions,chk_nofollow_for_members_mentions,chk_robots_for_members_favorites,chk_noindex_for_members_favorites,chk_nofollow_for_members_favorites,chk_robots_for_members_friends,chk_noindex_for_members_friends,chk_nofollow_for_members_friends,chk_robots_for_members_groups,chk_noindex_for_members_groups,chk_nofollow_for_members_groups,chk_robots_for_topics,chk_noindex_for_topics,chk_nofollow_for_topics,chk_robots_for_replied,chk_noindex_for_replied,chk_nofollow_for_replied,chk_robots_for_public,chk_noindex_for_public,chk_nofollow_for_public,chk_robots_for_friends,chk_noindex_for_friends,chk_nofollow_for_friends,chk_robots_for_groups,chk_noindex_for_groups,chk_nofollow_for_groups,chk_robots_for_activity,chk_noindex_for_activity,chk_nofollow_for_activity,chk_robots_for_forums,chk_noindex_for_forums,chk_nofollow_for_forums,chk_robots_for_groups_main,chk_noindex_for_groups_main,chk_nofollow_for_groups_main,txt_member_component,txt_groups_component,txt_groups_component_action,txt_activity_component,txt_activity_component_action,txt_profile_component_action,txt_friends_component_action," . $get_all_post_types;
 							?>
 
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
@@ -237,7 +244,7 @@
 								}
 								else
 								{
-									$value = "chk_robots_for_page,chk_noindex_for_page,chk_nofollow_for_page,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_page,chk_robots_for_members_activity,chk_noindex_for_members_activity,chk_nofollow_for_members_activity,chk_robots_for_members_mentions,chk_noindex_for_members_mentions,chk_nofollow_for_members_mentions,chk_robots_for_members_favorites,chk_noindex_for_members_favorites,chk_nofollow_for_members_favorites,chk_robots_for_members_friends,chk_noindex_for_members_friends,chk_nofollow_for_members_friends,chk_robots_for_members_groups,chk_noindex_for_members_groups,chk_nofollow_for_members_groups,chk_robots_for_topics,chk_noindex_for_topics,chk_nofollow_for_topics,chk_robots_for_replied,chk_noindex_for_replied,chk_nofollow_for_replied,chk_robots_for_public,chk_noindex_for_public,chk_nofollow_for_public,chk_robots_for_friends,chk_noindex_for_friends,chk_nofollow_for_friends,chk_robots_for_groups,chk_noindex_for_groups,chk_nofollow_for_groups,chk_robots_for_activity,chk_noindex_for_activity,chk_nofollow_for_activity,chk_robots_for_forums,chk_noindex_for_forums,chk_nofollow_for_forums,chk_robots_for_groups_main,chk_noindex_for_groups_main,chk_nofollow_for_groups_main,txt_member_component,txt_member_component_action,txt_member_component_paging,txt_groups_component,txt_groups_component_action,txt_groups_component_paging,txt_activity_component,txt_activity_component_action";
+									$value = "chk_robots_for_page,chk_noindex_for_page,chk_nofollow_for_page,chk_robots_for_post,chk_noindex_for_post,chk_nofollow_for_post,chk_overide_local_setting_for_post,chk_overide_local_setting_for_page,chk_robots_for_members_activity,chk_noindex_for_members_activity,chk_nofollow_for_members_activity,chk_robots_for_members_mentions,chk_noindex_for_members_mentions,chk_nofollow_for_members_mentions,chk_robots_for_members_favorites,chk_noindex_for_members_favorites,chk_nofollow_for_members_favorites,chk_robots_for_members_friends,chk_noindex_for_members_friends,chk_nofollow_for_members_friends,chk_robots_for_members_groups,chk_noindex_for_members_groups,chk_nofollow_for_members_groups,chk_robots_for_topics,chk_noindex_for_topics,chk_nofollow_for_topics,chk_robots_for_replied,chk_noindex_for_replied,chk_nofollow_for_replied,chk_robots_for_public,chk_noindex_for_public,chk_nofollow_for_public,chk_robots_for_friends,chk_noindex_for_friends,chk_nofollow_for_friends,chk_robots_for_groups,chk_noindex_for_groups,chk_nofollow_for_groups,chk_robots_for_activity,chk_noindex_for_activity,chk_nofollow_for_activity,chk_robots_for_forums,chk_noindex_for_forums,chk_nofollow_for_forums,chk_robots_for_groups_main,chk_noindex_for_groups_main,chk_nofollow_for_groups_main,txt_member_component,txt_groups_component,txt_groups_component_action,txt_activity_component,txt_activity_component_action,txt_profile_component_action,txt_friends_component_action";
 							?>
 									<input type="hidden" name="page_options" value="<?php echo $value;?>" />
 							<?php
