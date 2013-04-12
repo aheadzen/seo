@@ -453,7 +453,7 @@ class frontendSEOPlus
 		add_option(frontendSEOPlus::SEOPLUS_OPTION_FRIENDS_COMPONENT_ACTION,'%member_name% | %component_name% » %action_name%');
 		add_option(frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT_ACTION,'%group_name% | %component_name% » %action_name%');
 	}
-	function seoplus_uninstall
+	function seoplus_uninstall()
 	{
 		delete_option(frontendSEOPlus::SEOPLUS_OPTION_ACTIVITY_COMPONENT);
 		delete_option(frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT);
