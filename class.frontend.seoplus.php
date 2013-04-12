@@ -24,6 +24,14 @@ class frontendSEOPlus
 	const SEOPLUS_OPTION_NAME_FORUMS = "forums";
 	const SEOPLUS_OPTION_NAME_GROUPS_MAIN = "groups_main";
 	
+	const SEOPLUS_OPTION_ACTIVITY_COMPONENT_ACTION = "txt_activity_component_action";	
+	const SEOPLUS_OPTION_PROFILE_COMPONENT_ACTION = "txt_profile_component_action";
+	const SEOPLUS_OPTION_FRIENDS_COMPONENT_ACTION = "txt_friends_component_action";
+	const SEOPLUS_OPTION_GROUPS_COMPONENT_ACTION = "txt_groups_component_action";
+
+	const SEOPLUS_OPTION_ACTIVITY_COMPONENT = "txt_activity_component";
+	const SEOPLUS_OPTION_GROUPS_COMPONENT = "txt_groups_component";
+	const SEOPLUS_OPTION_MEMBER_COMPONENT = "txt_member_component";
 	
 	function add_meta_robots_tag_in_head_section()
 	{
@@ -231,7 +239,8 @@ class frontendSEOPlus
 		echo '<!-- SEO+ plugin -->';
 		echo '<meta name="robots" content="'.$nofollow. ', ' . $noindex.'" />'."\n";
 	}
-	function my_page_title()
+	/* This function will generate buddypress custom titles re-generate titles that best supports google */
+	function buddypress_custom_page_title()
 	{
 		global $bp, $post, $wp_query, $current_blog;
 		$title = "";
@@ -242,259 +251,55 @@ class frontendSEOPlus
 			{
 				if(bp_is_active('activity'))
 				{
-					$activity_component_action = get_option('txt_activity_component_action');
-					if(isset($activity_component_action) && !empty($activity_component_action))
-					{
-						if(preg_match_all('/\%(.*?)\%/',$activity_component_action,$match))
-						{
-								for($k=0;$k<count($match[1]);$k++)
-								{
-									if($match[1][$k] == "member_name")
-									{
-										
-										$search = "%" . "member_name" . "%";
-										if($bp->displayed_user->fullname)
-										{
-											$replace = $bp->displayed_user->fullname;
-										}	
-										$activity_component_action = str_replace($search,$replace,$activity_component_action);
-									}
-									else if($match[1][$k] == "component_name")
-									{
-										$search = "%" . "component_name" . "%";
-										if(bp_current_component())
-										{											
-											$replace = ucwords(bp_current_component());
-										}	
-										$activity_component_action = str_replace($search,$replace,$activity_component_action);
-									}
-									else if($match[1][$k] == "action_name")
-									{
-										$search = "%" . "action_name" . "%";
-										if(bp_current_action())
-										{											
-											$replace = ucwords(bp_current_action());
-										}	
-										$activity_component_action = str_replace($search,$replace,$activity_component_action);
-									}
-								}
-						}
-						$title = $activity_component_action;
-					}
-					else if(!empty($bp->displayed_user->fullname) && !is_404())
-					{
-						$title .= $this->set_page_title_for_member_pages('just-me');
-					}					
+					$option_to_be_called = frontendSEOPlus::SEOPLUS_OPTION_ACTIVITY_COMPONENT_ACTION;
+					$exclude_action_name = "just-me";
+					$title = $this->generate_title_for_component_action_option($option_to_be_called,$exclude_action_name);
 				}
 			}
 			else if($bp->current_component == "profile" || $bp->current_component == "xprofile")
 			{
 				if(bp_is_active('profile') || bp_is_active('xprofile'))
-				{
-					$profile_component_action = get_option('txt_profile_component_action');
-					if(isset($profile_component_action) && !empty($profile_component_action))
-					{
-						if(preg_match_all('/\%(.*?)\%/',$profile_component_action,$match))
-						{
-								for($k=0;$k<count($match[1]);$k++)
-								{
-									if($match[1][$k] == "member_name")
-									{
-										
-										$search = "%" . "member_name" . "%";
-										if($bp->displayed_user->fullname)
-										{
-											$replace = $bp->displayed_user->fullname;
-										}	
-										$profile_component_action = str_replace($search,$replace,$profile_component_action);
-									}
-									else if($match[1][$k] == "component_name")
-									{
-										$search = "%" . "component_name" . "%";
-										if(bp_current_component())
-										{											
-											$replace = ucwords(bp_current_component());
-										}	
-										$profile_component_action = str_replace($search,$replace,$profile_component_action);
-									}
-									else if($match[1][$k] == "action_name")
-									{
-										$search = "%" . "action_name" . "%";
-										if(bp_current_action())
-										{											
-											$replace = ucwords(bp_current_action());
-										}	
-										$profile_component_action = str_replace($search,$replace,$profile_component_action);
-									}
-								}
-						}
-						$title = $profile_component_action;
-					}				
-					else if (!empty( $bp->displayed_user->fullname ) && !is_404())
-					{
-						$title .= $this->set_page_title_for_member_pages('public');
-					}
+				{					
+					$option_to_be_called = frontendSEOPlus::SEOPLUS_OPTION_PROFILE_COMPONENT_ACTION;
+					$exclude_action_name = "public";
+					$title = $this->generate_title_for_component_action_option($option_to_be_called,$exclude_action_name);
 				}
 			}
 			else if($bp->current_component == "friends")
 			{
 				if(bp_is_active('friends'))
 				{
-					$friends_component_action = get_option('txt_friends_component_action');
-					if(isset($friends_component_action) && !empty($friends_component_action))
-					{
-						if(preg_match_all('/\%(.*?)\%/',$friends_component_action,$match))
-						{
-								for($k=0;$k<count($match[1]);$k++)
-								{
-									if($match[1][$k] == "member_name")
-									{
-										$search = "%" . "member_name" . "%";
-										if($bp->displayed_user->fullname)
-										{
-											$replace = $bp->displayed_user->fullname;
-										}
-										$friends_component_action = str_replace($search,$replace,$friends_component_action);
-									}
-									else if($match[1][$k] == "component_name")
-									{
-										$search = "%" . "component_name" . "%";
-										if(bp_current_component())
-										{
-											$replace = ucwords(bp_current_component());
-										}
-										$friends_component_action = str_replace($search,$replace,$friends_component_action);
-									}
-									else if($match[1][$k] == "action_name")
-									{
-										$search = "%" . "action_name" . "%";
-										if(bp_current_action())
-										{
-											$replace = ucwords(bp_current_action());
-										}
-										$friends_component_action = str_replace($search,$replace,$friends_component_action);
-									}
-								}
-						}
-						$title = $friends_component_action;
-					}
-					else if(!empty( $bp->displayed_user->fullname ) && !is_404())
-					{
-						$title .= $this->set_page_title_for_member_pages('');
-					}
+					$option_to_be_called = frontendSEOPlus::SEOPLUS_OPTION_FRIENDS_COMPONENT_ACTION;
+					$exclude_action_name = "";
+					$title = $this->generate_title_for_component_action_option($option_to_be_called,$exclude_action_name);
 				}
 			}
 			else if($bp->current_component == "groups")
 			{
 				if(bp_is_active('groups'))
 				{
-					$groups_component_action = get_option('txt_groups_component_action');
-					if(isset($groups_component_action) && !empty($groups_component_action))
-					{
-						if(preg_match_all('/\%(.*?)\%/',$groups_component_action,$match))
-						{							
-								for($k=0;$k<count($match[1]);$k++)
-								{
-									if($match[1][$k] == "group_name")
-									{
-										$search = "%" . "group_name" . "%";
-										if($bp->bp_options_title)
-										{
-											$replace = $bp->bp_options_title;
-										}	
-										$groups_component_action = str_replace($search,$replace,$groups_component_action);
-									}
-									else if($match[1][$k] == "component_name")
-									{
-										$search = "%" . "component_name" . "%";
-										if(bp_current_component())
-										{											
-											$replace = ucwords(bp_current_component());
-										}	
-										$groups_component_action = str_replace($search,$replace,$groups_component_action);
-									}
-									else if($match[1][$k] == "action_name")
-									{
-										$search = "%" . "action_name" . "%";
-										if(bp_current_action())
-										{											
-											$replace = ucwords($bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name']);
-										}	
-										$groups_component_action = str_replace($search,$replace,$groups_component_action);
-									}
-								}
-						}
-						$title = $groups_component_action;
-						/* Static Code for forum */
-							if (bp_is_current_action('forum') && bp_is_action_variable('topic', 0))
-							{
-								if (bp_has_forum_topic_posts())
-								{
-									$title = bp_get_the_topic_title() . " | ";
-									$subnav = '';
-									if ( isset($_REQUEST['topic_page']) && intval($_REQUEST['topic_page']) != 1 )
-									{
-										$title .= 'Page ' . intval( $_REQUEST['topic_page'] ) . ' | ';
-									}
-								}
-							}
-						/* Static Code for forum Ends Here */
-					}
-					else
-					{
-						$subnav = isset( $bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name'] ) ? $bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name'] : '';
-						
-						if (bp_is_current_action('forum') && bp_is_action_variable('topic', 0))
-						{
-							if (bp_has_forum_topic_posts())
-							{
-								$title = bp_get_the_topic_title() . " | ";
-								$subnav = '';
-								if ( isset($_REQUEST['topic_page']) && intval($_REQUEST['topic_page']) != 1 )
-								{
-									$title .= 'Page ' . intval( $_REQUEST['topic_page'] ) . ' | ';
-								}
-							}
-						}
-						else $title = '';
-						
-						$sep1 = ' | ';
-						if($subnav == 'Home' || empty( $subnav))
-						{
-							$sep1 = '';
-							$subnav = '';
-						}
-						// translators: "group name | group nav section name"
-						$title .= sprintf(__('%1$s%3$s%2$s%4$s', 'buddypress'), $bp->bp_options_title, $subnav, $sep1 , '');
-					}
-				}	
+					$option_to_be_called = frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT_ACTION;
+					$exclude_action_name = "";
+					$title = $this->generate_title_for_component_action_option($option_to_be_called,$exclude_action_name);
+				}
 			}
 		}
 		else if(isset($bp->current_component) && !empty($bp->current_component))
 		{
 			if($bp->current_component == "activity")
-			{
-				$option_value = get_option('txt_activity_component');
-				if(isset($option_value) && !empty($option_value))
-				{
-					$title = $option_value;
-				}
+			{			
+				$option_to_be_called = frontendSEOPlus::SEOPLUS_OPTION_ACTIVITY_COMPONENT;
+				$title = $this->generate_title_for_main_component_page($option_to_be_called);
 			}
 			else if($bp->current_component == "groups")
 			{
-				$option_value = get_option('txt_groups_component');
-				if(isset($option_value) && !empty($option_value))
-				{
-					$title = $option_value;
-				}				
+				$option_to_be_called = frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT;
+				$title = $this->generate_title_for_main_component_page($option_to_be_called);			
 			}
 			else if($bp->current_component == "members")
 			{
-				$option_value = get_option('txt_member_component');
-				if(isset($option_value) && !empty($option_value))
-				{
-					$title = $option_value;
-				}				
+				$option_to_be_called = frontendSEOPlus::SEOPLUS_OPTION_MEMBER_COMPONENT;
+				$title = $this->generate_title_for_main_component_page($option_to_be_called);
 			}
 		}
 		if(bp_is_activity_component() && isset($_REQUEST['acpage']) && intval($_REQUEST['acpage']) != 1)
@@ -513,19 +318,151 @@ class frontendSEOPlus
 		$title = preg_replace( '|<span>[0-9]+</span>|', '', $title );
 		return $title;
 	}
+	/* This function will generate buddypress custom titles when back-end options are not set */
 	function set_page_title_for_member_pages($ignore_action)
 	{
 		$curr_action = bp_current_action();
 		$skip_action = array($ignore_action);
 		if(!empty($curr_action) && !in_array($curr_action, $skip_action))
 			$title_action = ' &raquo; ' . ucwords(bp_current_action());
-		// translators: "displayed user's name | canonicalised component name"
 		$title = strip_tags(sprintf( __( '%1$s | %2$s%4$s%3$s', 'buddy' ), bp_get_displayed_user_fullname(), ucwords( bp_current_component()), $title_action, ''));
 		return $title;
-	}	
-	/* This function will generate buddypress titles */
-	function generate_buddypress_titles()
+	}
+	/* This function will generate buddypress titles for main component pages */
+	function generate_title_for_main_component_page()
 	{
+		$option_value = get_option($option_to_be_called);
+		if(isset($option_value) && !empty($option_value))
+		{
+			$title = $option_value;
+		}
+		return $title;
+	}
+	/* This function will generate buddypress titles for component / action page based on the back-end options */
+	function generate_title_for_component_action_option($option_to_be_called,$exclude_action_name)
+	{
+		global $bp, $post, $wp_query, $current_blog;
+
+		$option_for_component_action = get_option($option_to_be_called);
+		if(isset($option_for_component_action) && !empty($option_for_component_action))
+		{
+			if(preg_match_all('/\%(.*?)\%/',$option_for_component_action,$match))
+			{
+				for($k=0;$k<count($match[1]);$k++)
+				{
+					if($match[1][$k] == "member_name")
+					{										
+						$search = "%" . "member_name" . "%";
+						if($bp->displayed_user->fullname)
+						{
+							$replace = $bp->displayed_user->fullname;
+						}
+						$option_for_component_action = str_replace($search,$replace,$option_for_component_action);
+					}
+					else if($match[1][$k] == "component_name")
+					{
+						$search = "%" . "component_name" . "%";
+						if(bp_current_component())
+						{
+							$replace = ucwords(bp_current_component());
+						}
+						$option_for_component_action = str_replace($search,$replace,$option_for_component_action);
+					}
+					else if($match[1][$k] == "action_name")
+					{
+						$search = "%" . "action_name" . "%";
+						if(bp_current_action())
+						{
+							if($bp->current_component == "groups")
+							{
+								$replace = ucwords($bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name']);
+							}
+							else
+							{
+								$replace = ucwords(bp_current_action());
+							}
+						}
+						$option_for_component_action = str_replace($search,$replace,$option_for_component_action);
+					}
+					else if($match[1][$k] == "group_name")
+					{
+						$search = "%" . "group_name" . "%";
+						if($bp->bp_options_title)
+						{
+							$replace = $bp->bp_options_title;
+						}
+						$option_for_component_action = str_replace($search,$replace,$option_for_component_action);
+					}
+				}
+			}
+			if (bp_is_current_action('forum') && bp_is_action_variable('topic', 0))
+			{
+				if (bp_has_forum_topic_posts())
+				{
+					$title = bp_get_the_topic_title() . " | ";
+					$subnav = '';
+					if(isset($_REQUEST['topic_page']) && intval($_REQUEST['topic_page']) != 1)
+					{
+						$title .= 'Page ' . intval( $_REQUEST['topic_page'] ) . ' | ';
+					}
+				}
+			}
+			else
+			{
+				$title = $option_for_component_action;
+			}
+		}
+		else if(!empty($bp->displayed_user->fullname) && !is_404())
+		{
+			$title .= $this->set_page_title_for_member_pages($exclude_action_name);
+		}
+		else
+		{
+			$subnav = isset( $bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name'] ) ? $bp->bp_options_nav[$bp->groups->current_group->slug][$bp->current_action]['name'] : '';
+			if (bp_is_current_action('forum') && bp_is_action_variable('topic', 0))
+			{
+				if (bp_has_forum_topic_posts())
+				{
+					$title = bp_get_the_topic_title() . " | ";
+					$subnav = '';
+					if ( isset($_REQUEST['topic_page']) && intval($_REQUEST['topic_page']) != 1 )
+					{
+						$title .= 'Page ' . intval( $_REQUEST['topic_page'] ) . ' | ';
+					}
+				}
+			}
+			else $title = '';
+			$sep1 = ' | ';
+			if($subnav == 'Home' || empty( $subnav))
+			{
+				$sep1 = '';
+				$subnav = '';
+			}
+			$title .= sprintf(__('%1$s%3$s%2$s%4$s', 'buddypress'), $bp->bp_options_title, $subnav, $sep1 , '');
+		}
+		return $title;
+	}
+	function seoplus_install()
+	{
+		add_option(frontendSEOPlus::SEOPLUS_OPTION_ACTIVITY_COMPONENT,'Activity Streams Directory');
+		add_option(frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT,'Group Streams Directory');
+		add_option(frontendSEOPlus::SEOPLUS_OPTION_MEMBER_COMPONENT,'Member Streams Directory');
+
+		add_option(frontendSEOPlus::SEOPLUS_OPTION_ACTIVITY_COMPONENT_ACTION,'%member_name% | %component_name% » %action_name%');
+		add_option(frontendSEOPlus::SEOPLUS_OPTION_PROFILE_COMPONENT_ACTION,'%member_name% | %component_name% » %action_name%');
+		add_option(frontendSEOPlus::SEOPLUS_OPTION_FRIENDS_COMPONENT_ACTION,'%member_name% | %component_name% » %action_name%');
+		add_option(frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT_ACTION,'%group_name% | %component_name% » %action_name%');
+	}
+	function seoplus_uninstall
+	{
+		delete_option(frontendSEOPlus::SEOPLUS_OPTION_ACTIVITY_COMPONENT);
+		delete_option(frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT);
+		delete_option(frontendSEOPlus::SEOPLUS_OPTION_MEMBER_COMPONENT);
+
+		delete_option(frontendSEOPlus::SEOPLUS_OPTION_ACTIVITY_COMPONENT_ACTION);
+		delete_option(frontendSEOPlus::SEOPLUS_OPTION_PROFILE_COMPONENT_ACTION);
+		delete_option(frontendSEOPlus::SEOPLUS_OPTION_FRIENDS_COMPONENT_ACTION);
+		delete_option(frontendSEOPlus::SEOPLUS_OPTION_GROUPS_COMPONENT_ACTION);	
 	}
 }
 ?>
